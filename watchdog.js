@@ -88,4 +88,4 @@ console.log('Disk write speed = '+zelbench_ddwrite.trim());
   }
 console.log("============================================================["+zelbench_counter+"/"+zelcashd_counter+"]");
 }
-setInterval(zeldaemon_check, 70000);
+setInterval(zeldaemon_check, 170000);
