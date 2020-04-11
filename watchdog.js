@@ -4,7 +4,7 @@ var zelcashd_counter=0;
 var zelbench_counter=0;
 
 sleep.sleep(10);
-console.log('Watchdog v2.0.0 Starting...');
+console.log('Watchdog v2.0.1 Starting...');
 console.log('=================================================================');
 function zeldaemon_check() {
 
