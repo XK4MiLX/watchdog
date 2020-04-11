@@ -70,7 +70,7 @@ console.log('Last benchmark time = '+bench_local_time);
   
 if (zelbench_last_paid_height == ""){
 } else{
-console.log('Last paid time = '+zelbench_last_paid_height.trim());
+console.log('Last paid hight = '+zelbench_last_paid_height.trim());
 } 
   
 if (zelbench_last_paid_height == ""){
