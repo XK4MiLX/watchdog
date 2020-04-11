@@ -75,7 +75,9 @@ console.log('Last paid hight = '+zelcash_last_paid_height.trim());
   
 if (zelbench_ddwrite == ""){
 } else{
-console.log('Disk write speed = '+zelbench_ddwrite.trim());
+console.log('Disk write speed = '+Number(zelbench_ddwrite.trim()).toFixed(2));
+  
+  
 } 
  
   if ( zelbench_counter > 3 || zelcashd_counter > 3 ){
