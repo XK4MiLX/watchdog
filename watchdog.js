@@ -73,7 +73,7 @@ if (zelcash_last_paid_height == ""){
 console.log('Last paid hight = '+zelcash_last_paid_height.trim());
 } 
   
-if (zelbench_last_paid_height == ""){
+if (zelbench_ddwrite == ""){
 } else{
 console.log('Disk write speed = '+zelbench_ddwrite.trim());
 } 
