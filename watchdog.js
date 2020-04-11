@@ -1,10 +1,12 @@
 var shell = require('shelljs');
 var sleep = require('sleep');
+var moment = require('moment');
 var zelcashd_counter=0;
 var zelbench_counter=0;
 
+
 sleep.sleep(10);
-console.log('Watchdog v2.0.1 Starting...');
+console.log('Watchdog v2.0.2 Starting...');
 console.log('=================================================================');
 function zeldaemon_check() {
 
@@ -19,6 +21,11 @@ var zelbench_status = shell.exec("zelbench-cli getstatus | jq '.benchmarking'",{
 var zelback_status = shell.exec("zelbench-cli getstatus | jq '.zelback'",{ silent: true }).stdout;
 var zelcash_check = shell.exec("zelcash-cli getinfo | jq '.version'",{ silent: true }).stdout;
 var zelcash_node_status = shell.exec("zelcash-cli getzelnodestatus | jq '.status'",{ silent: true }).stdout;
+var zelbench_ddwrite = shell.exec("zelbench-cli getbenchmarks | jq '.ddwrite'",{ silent: true }).stdout;
+var zelbench_time = shell.exec("zelbench-cli getbenchmarks | jq '.time'",{ silent: true }).stdout;  
+var zelbench_last_paid_height = shell.exec("zelbench-cli getbenchmarks | jq '.last_paid_height'",{ silent: true }).stdout;
+  
+  
 if (zelcash_node_status == ""){
 } else{
 console.log('Zelnode status = '+zelcash_node_status.trim());
@@ -54,6 +61,23 @@ else{
 zelbench_counter=0;
 }
   
+if (zelbench_time == ""){
+} else{
+var timestamp = moment.unix(Number(zelbench_time.trim()));  
+var bench_local_time = timestamp.format("DD/MM/YYYY HH:mm:ss")  
+console.log('Last benchmark time = '+bench_local_time);
+} 
+  
+if (zelbench_last_paid_height == ""){
+} else{
+console.log('Last paid hight = '+zelbench_last_paid_height.trim());
+} 
+  
+if (zelbench_last_paid_height == ""){
+} else{
+console.log('Disk write speed = '+zelbench_ddwrite.trim());
+} 
+ 
   if ( zelbench_counter > 3 || zelcashd_counter > 3 ){
     console.log('Watchdog shutdowning....');
     console.log('Reason: Failed more then 4 time in rows...');
@@ -62,4 +86,4 @@ zelbench_counter=0;
   }
 console.log("============================================================["+zelbench_counter+"/"+zelcashd_counter+"]");
 }
-setInterval(zeldaemon_check, 180000);
+setInterval(zeldaemon_check, 170000);
