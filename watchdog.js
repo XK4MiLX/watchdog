@@ -77,9 +77,7 @@ if (zelbench_last_paid_height == ""){
 } else{
 console.log('Disk write speed = '+zelbench_ddwrite.trim());
 } 
-  
-  
-  
+ 
   if ( zelbench_counter > 3 || zelcashd_counter > 3 ){
     console.log('Watchdog shutdowning....');
     console.log('Reason: Failed more then 4 time in rows...');
