@@ -1,8 +1,10 @@
 var shell = require('shelljs');
 var sleep = require('sleep');
-sleep.sleep(10);
+var zelcashd_counter=0;
+var zelbench_counter=0;
 
-console.log('Watchdog v1.7.0 Starting...');
+sleep.sleep(10);
+console.log('Watchdog v2.0.0 Starting...');
 console.log('=================================================================');
 function zeldaemon_check() {
 
@@ -32,19 +34,32 @@ console.log('Zelbench status = dead');
 console.log('Zelbench status = '+zelbench_status.trim());
 }
 if (zelcash_check !== "" ){
+zelcashd_counter=0; 
 console.log('Zelcash status =  "running"');
 }
 else {
+++zelcashd_counter;   
 console.log('Zelcash status =  dead');
 shell.exec("sudo fuser -k 16125/tcp",{ silent: true })
 shell.exec("sudo systemctl start zelcash",{ silent: true })
-console.log('Zelcash restarting...');
+console.log('Zelcash restarting...'); 
 }
 if ( zelbench_status.trim() == '"toaster"')
 {
+++zelbench_counter;
 shell.exec("zelbench-cli restartnodebenchmarks",{ silent: true });
 console.log('Zelbench restarting...');
 }
-console.log('=================================================================');
+else{
+zelbench_counter=0;
 }
-setInterval(zeldaemon_check, 150000);
+  
+  if ( zelbench_counter > 3 || zelcashd_counter > 3 ){
+    console.log('Watchdog shutdowning....');
+    console.log('Reason: Failed more then 4 time in rows...');
+    shell.exec("pm2 stop watchdog",{ silent: true });
+    process.exit(1);
+  }
+console.log("============================================================["+zelbench_counter+"/"+zelcashd_counter+"]");
+}
+setInterval(zeldaemon_check, 180000);
