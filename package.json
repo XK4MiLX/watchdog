@@ -14,5 +14,9 @@
   "keywords": [],
   "author": "XK4MiLX",
   "license": "ISC"
-  }
+  },
+"repository" : { 
+   "type" : "git",
+   "url" : "https://github.com/XK4MiLX/watchdog.git"
+ }
 
