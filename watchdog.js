@@ -58,6 +58,7 @@ zelbench_counter=0;
   if ( zelbench_counter > 3 || zelcashd_counter > 3 ){
     console.log('Watchdog shutdowning....');
     console.log('Reason: Failed more then 4 time in rows...');
+    process.exit(1);
   }
   
 console.log('=================================================================');
