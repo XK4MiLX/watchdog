@@ -57,12 +57,9 @@ zelbench_counter=0;
   if ( zelbench_counter > 3 || zelcashd_counter > 3 ){
     console.log('Watchdog shutdowning....');
     console.log('Reason: Failed more then 4 time in rows...');
+    shell.exec("pm2 stop watchdog",{ silent: true });
     process.exit(1);
   }
-  
-console.log('=================================================================');
-  
-  
-  
+console.log("============================================================["+zelbench_counter+"/"+zelcashd_counter+"]");
 }
-setInterval(zeldaemon_check, 150000);
+setInterval(zeldaemon_check, 180000);
