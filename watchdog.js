@@ -51,7 +51,7 @@ shell.exec("sudo fuser -k 16125/tcp",{ silent: true })
 shell.exec("sudo systemctl start zelcash",{ silent: true })
 console.log('Zelcash restarting...'); 
 }
-if ( zelbench_status.trim() == '"toaster"')
+if ( zelbench_status.trim() == '"toaster"' || zelbench_status.trim() == '"failed"' )
 {
 ++zelbench_counter;
 shell.exec("zelbench-cli restartnodebenchmarks",{ silent: true });
