@@ -23,7 +23,7 @@ var zelcash_check = shell.exec("zelcash-cli getinfo | jq '.version'",{ silent: t
 var zelcash_node_status = shell.exec("zelcash-cli getzelnodestatus | jq '.status'",{ silent: true }).stdout;
 var zelbench_ddwrite = shell.exec("zelbench-cli getbenchmarks | jq '.ddwrite'",{ silent: true }).stdout;
 var zelbench_time = shell.exec("zelbench-cli getbenchmarks | jq '.time'",{ silent: true }).stdout;  
-var zelbench_last_paid_height = shell.exec("zelbench-cli getbenchmarks | jq '.last_paid_height'",{ silent: true }).stdout;
+var zelcash_last_paid_height = shell.exec("zelcash-cli getzelnodestatus | jq '.last_paid_height'",{ silent: true }).stdout;
   
   
 if (zelcash_node_status == ""){
@@ -68,7 +68,7 @@ var bench_local_time = timestamp.format("DD/MM/YYYY HH:mm:ss")
 console.log('Last benchmark time = '+bench_local_time);
 } 
   
-if (zelbench_last_paid_height == ""){
+if (zelcash_last_paid_height == ""){
 } else{
 console.log('Last paid hight = '+zelbench_last_paid_height.trim());
 } 
