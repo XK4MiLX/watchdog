@@ -6,7 +6,7 @@ var zelbench_counter=0;
 
 
 sleep.sleep(10);
-console.log('Watchdog v2.0.4 Starting...');
+console.log('Watchdog v2.0.5 Starting...');
 console.log('=================================================================');
 function zeldaemon_check() {
 
@@ -25,6 +25,14 @@ var zelbench_ddwrite = shell.exec("zelbench-cli getbenchmarks | jq '.ddwrite'",{
 var zelbench_time = shell.exec("zelbench-cli getbenchmarks | jq '.time'",{ silent: true }).stdout;  
 var zelcash_last_paid_height = shell.exec("zelcash-cli getzelnodestatus | jq '.last_paid_height'",{ silent: true }).stdout;
   
+  
+  if ( zelbench_counter > 3 || zelcashd_counter > 3 ){
+    console.log('\x1b[34mWatchdog shutdowning....\x1b[0m');
+    console.log('\x1b[34mReason: Failed more then 4 time in rows.\x1b[0m');
+    console.log('============================================================[\x1b[36m'+zelbench_counter+'/'+zelcashd_counter+'\x1b[0m]');
+    shell.exec("pm2 stop watchdog",{ silent: true });
+    process.exit(1);
+  } 
   
 if (zelcash_node_status == ""){
   console.log('Zelnode status = \x1b[31mdead\x1b[0m');  
@@ -96,13 +104,6 @@ if (zelbench_ddwrite == ""){
 console.log('Disk write speed = '+Number(zelbench_ddwrite.trim()).toFixed(2));
 } 
  
-  if ( zelbench_counter > 3 || zelcashd_counter > 3 ){
-    console.log('\x1b[34mWatchdog shutdowning....\x1b[0m');
-    console.log('\x1b[34mReason: Failed more then 4 time in rows.\x1b[0m');
-    shell.exec("pm2 stop watchdog",{ silent: true });
-    console.log('============================================================[\x1b[36m'+zelbench_counter+'/'+zelcashd_counter+'\x1b[0m]');
-    process.exit(1);
-  }
 console.log('============================================================[\x1b[36m'+zelbench_counter+'/'+zelcashd_counter+'\x1b[0m]');
 }
 setInterval(zeldaemon_check, 170000);
