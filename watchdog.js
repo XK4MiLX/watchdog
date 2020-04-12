@@ -27,7 +27,7 @@ var zelcash_last_paid_height = shell.exec("zelcash-cli getzelnodestatus | jq '.l
   
   
 if (zelcash_node_status == ""){
-  console.log('Zelnode status =\x1b[31mdead\x1b[0m');  
+  console.log('Zelnode status = \x1b[31mdead\x1b[0m');  
 } else {  
   if ( zelcash_node_status.trim() == '"expired"'){
     console.log('Zelnode status =\x1b[31m',zelcash_node_status.trim(), '\x1b[0m');
@@ -61,7 +61,7 @@ console.log('Zelbench status = \x1b[31mdead\x1b[0m');
   
 if (zelcash_check !== "" ){
 zelcashd_counter=0; 
-console.log('Zelcash status = ','\x1b[34m"running"\x1b[0m');
+console.log('Zelcash status = \x1b[34m"running"\x1b[0m');
 }
 else {
 ++zelcashd_counter;   
@@ -100,9 +100,9 @@ console.log('Disk write speed = '+Number(zelbench_ddwrite.trim()).toFixed(2));
     console.log('\x1b[34mWatchdog shutdowning....\x1b[0m');
     console.log('\x1b[34mReason: Failed more then 4 time in rows.\x1b[0m');
     shell.exec("pm2 stop watchdog",{ silent: true });
-    console.log("============================================================[\x1b[36mzelbench_counter/zelcashd_counter\x1b[0m]");
+    console.log('============================================================[\x1b[36m'+zelbench_counter+'/'+zelcashd_counter+'\x1b[0m]');
     process.exit(1);
   }
-console.log("============================================================[\x1b[36mzelbench_counter/zelcashd_counter\x1b[0m]");
+console.log('============================================================[\x1b[36m'+zelbench_counter+'/'+zelcashd_counter+'\x1b[0m]');
 }
 setInterval(zeldaemon_check, 170000);
