@@ -28,7 +28,7 @@ var zelcash_last_paid_height = shell.exec("zelcash-cli getzelnodestatus | jq '.l
   
 if (zelcash_node_status == ""){
 } else{
-console.log('Zelnode status = '+zelcash_node_status.trim());
+console.log('Zelnode status =','\x1b[36m', zelcash_node_status.trim(), '\x1b[0m');
 }
 if (zelback_status == ""){
 console.log('Zelback status = dead');
