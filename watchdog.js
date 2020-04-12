@@ -27,24 +27,24 @@ var zelcash_last_paid_height = shell.exec("zelcash-cli getzelnodestatus | jq '.l
   
   
 if (zelcash_node_status == ""){
-  console.log('Zelnode status = \x1b[31mdead\x1b[0m');  
+  console.log('Zelnode status =\x1b[31mdead\x1b[0m');  
 } else {  
   if ( zelcash_node_status.trim() == '"expired"'){
-    console.log('Zelnode status = \x1b[31m',zelcash_node_status.trim(), '\x1b[0m');
+    console.log('Zelnode status =\x1b[31m',zelcash_node_status.trim(), '\x1b[0m');
    }
   else {
-   console.log('Zelnode status = \x1b[34m',zelcash_node_status.trim(), '\x1b[0m');
+   console.log('Zelnode status =\x1b[34m',zelcash_node_status.trim(), '\x1b[0m');
    }   
 }
   
 if (zelback_status == ""){
-console.log('Zelback status = \x1b[31mdead\x1b[0m');
+console.log('Zelback status =\x1b[31mdead\x1b[0m');
 } else {
   
   if (zelback_status.trim() == '"disconnected"'){
-    console.log('Zelback status = \x1b[31m',zelback_status.trim(),'\x1b[0m');  
+    console.log('Zelback status =\x1b[31m',zelback_status.trim(),'\x1b[0m');  
   } else {    
-    console.log('Zelback status = \x1b[34m',zelback_status.trim(),'\x1b[0m');
+    console.log('Zelback status =\x1b[34m',zelback_status.trim(),'\x1b[0m');
   } 
 }
   
@@ -53,9 +53,9 @@ console.log('Zelbench status = \x1b[31mdead\x1b[0m');
 } else {
   
   if (zelbench_status.trim() == '"toaster"' || zelbench_status.trim() == '"failed"'){
-    console.log('Zelback status = \x1b[31m',zelbench_status.trim(),'\x1b[0m');  
+    console.log('Zelback status =\x1b[31m',zelbench_status.trim(),'\x1b[0m');  
   } else {    
-    console.log('Zelback status = \x1b[34m',zelbench_status.trim(),'\x1b[0m');
+    console.log('Zelback status =\x1b[34m',zelbench_status.trim(),'\x1b[0m');
   } 
 } 
   
@@ -97,12 +97,12 @@ console.log('Disk write speed = '+Number(zelbench_ddwrite.trim()).toFixed(2));
 } 
  
   if ( zelbench_counter > 3 || zelcashd_counter > 3 ){
-    console.log('\x1b[34m','Watchdog shutdowning....','\x1b[0m');
-    console.log('\x1b[34m','Reason: Failed more then 4 time in rows.','\x1b[0m');
+    console.log('\x1b[34mWatchdog shutdowning....\x1b[0m');
+    console.log('\x1b[34mReason: Failed more then 4 time in rows.\x1b[0m');
     shell.exec("pm2 stop watchdog",{ silent: true });
-    console.log('============================================================[\x1b[36m',zelbench_counter,'/',zelcashd_counter,'\x1b[0m]');
+    console.log("============================================================[\x1b[36mzelbench_counter/zelcashd_counter\x1b[0m]");
     process.exit(1);
   }
-console.log('============================================================[\x1b[36m',zelbench_counter,'/',zelcashd_counter,'\x1b[0m]');
+console.log("============================================================[\x1b[36mzelbench_counter/zelcashd_counter\x1b[0m]");
 }
 setInterval(zeldaemon_check, 170000);
