@@ -38,7 +38,7 @@ if (zelcash_node_status == ""){
 }
   
 if (zelback_status == ""){
-console.log('Zelback status =\x1b[31mdead\x1b[0m');
+console.log('Zelback status = \x1b[31mdead\x1b[0m');
 } else {
   
   if (zelback_status.trim() == '"disconnected"'){
@@ -53,9 +53,9 @@ console.log('Zelbench status = \x1b[31mdead\x1b[0m');
 } else {
   
   if (zelbench_status.trim() == '"toaster"' || zelbench_status.trim() == '"failed"'){
-    console.log('Zelback status =\x1b[31m',zelbench_status.trim(),'\x1b[0m');  
+    console.log('Zelbench status =\x1b[31m',zelbench_status.trim(),'\x1b[0m');  
   } else {    
-    console.log('Zelback status =\x1b[34m',zelbench_status.trim(),'\x1b[0m');
+    console.log('Zelbench status =\x1b[34m',zelbench_status.trim(),'\x1b[0m');
   } 
 } 
   
