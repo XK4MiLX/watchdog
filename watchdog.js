@@ -29,7 +29,7 @@ var zelcash_last_paid_height = shell.exec("zelcash-cli getzelnodestatus | jq '.l
   if ( zelbench_counter > 3 || zelcashd_counter > 3 ){
     console.log('\x1b[34mWatchdog shutdowning....\x1b[0m');
     console.log('\x1b[34mReason: Failed more then 4 time in rows.\x1b[0m');
-    console.log('============================================================[\x1b[36m'+zelbench_counter+'/'+zelcashd_counter+'\x1b[0m]');
+    console.log('=================================================================');
     shell.exec("pm2 stop watchdog",{ silent: true });
     process.exit(1);
   } 
