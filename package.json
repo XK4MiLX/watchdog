@@ -13,7 +13,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm install"
+      "pre-commit": "npm install",
+      "pre-push": "npm install"
     }
   },
   "repository": {
