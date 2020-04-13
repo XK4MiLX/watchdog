@@ -1,6 +1,6 @@
 {
   "name": "watchdog",
-  "version": "2.0.7",
+  "version": "2.0.6",
   "description": "Watchdog for zelnode",
   "main": "watchdog.js",
   "dependencies": {
@@ -11,7 +11,7 @@
   "devDependencies": {
     "husky": "^4.2.5"
   },
-   "husky": {
+  "husky": {
     "hooks": {
       "pre-commit": "npm install"
     }
