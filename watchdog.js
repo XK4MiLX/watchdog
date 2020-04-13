@@ -6,7 +6,7 @@ var zelbench_counter=0;
 
 
 sleep.sleep(10);
-console.log('Watchdog v2.0.5 Starting...');
+console.log('Watchdog v2.0.6 Starting...');
 console.log('=================================================================');
 function zeldaemon_check() {
 
@@ -91,19 +91,18 @@ if (zelbench_time == ""){
 } else{
 var timestamp = moment.unix(Number(zelbench_time.trim()));  
 var bench_local_time = timestamp.format("DD/MM/YYYY HH:mm:ss")  
-console.log('Last benchmark time = '+bench_local_time);
+console.log('Last benchmark time = \x1b[33m'+bench_local_time+'\x1b[0m');
 } 
   
 if (zelcash_last_paid_height == ""){
 } else{
-console.log('Last paid hight = '+zelcash_last_paid_height.trim());
+console.log('Last paid hight = \x1b[33m'+zelcash_last_paid_height.trim()+'\x1b[0m');
 } 
   
 if (zelbench_ddwrite == ""){
 } else{
-console.log('Disk write speed = '+Number(zelbench_ddwrite.trim()).toFixed(2));
+console.log('Disk write speed =  \x1b[33m'+Number(zelbench_ddwrite.trim()).toFixed(2)+'\x1b[0m');
 } 
- 
 console.log('============================================================[\x1b[36m'+zelbench_counter+'/'+zelcashd_counter+'\x1b[0m]');
 }
 setInterval(zeldaemon_check, 170000);
