@@ -6,7 +6,7 @@ var zelbench_counter=0;
 
 
 sleep.sleep(10);
-console.log('Watchdog v2.0.6 Starting...');
+console.log('Watchdog v2.1.0 Starting...');
 console.log('=================================================================');
 function zeldaemon_check() {
 
