@@ -1,6 +1,6 @@
 # Watchdog for ZelNode
 * Auto restarting zelcash daemon if crash  
-* Auto restarting benchmark if "failed" && "taoster"
+* Auto restarting benchmark if "failed" or "taoster"
 * Update "cd watchdog && git pull"
 * Logs in real time => type "pm2 monit" and select "watchdog"  
 
