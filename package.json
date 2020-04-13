@@ -11,6 +11,11 @@
   "devDependencies": {
     "husky": "^4.2.5"
   },
+   "husky": {
+    "hooks": {
+      "pre-commit": "npm install"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/XK4MiLX/watchdog.git"
