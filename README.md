@@ -1,6 +1,6 @@
 # Watchdog for ZelNode
 * Auto restarting zelcash daemon when crash  
-* Auto restarting benchmark if "failed" or "taoster"
+* Auto restarting benchmark when "failed" or "taoster"
 * Anti-hamer option build-in
 * Update "cd watchdog && git pull"
 * Auto-reload after update  
