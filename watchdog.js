@@ -5,9 +5,24 @@ var zelcashd_counter=0;
 var zelbench_counter=0;
 
 
-sleep.sleep(10);
+sleep.sleep(15);
 console.log('Watchdog v2.1.1 Starting...');
 console.log('=================================================================');
+
+function auto_update() {
+ var remote_version = shell.exec("curl -sS https://raw.githubusercontent.com/XK4MiLX/watchdog/master/package.json | jq -r '.version'",{ silent: true }).stdout;
+ var local_version = shell.exec("jq -r '.version' package.json",{ silent: true }).stdout;
+  
+  if ( remote_version !== local_version && remote_version != "" ){ 
+    console.log('New version detected: ');
+    console.log('Local version: \x1b[31m'+local_version.trim()+'\x1b[0m');
+    console.log('Remote version: \x1b[32m'+remote_version.trim()+'\x1b[0m');
+    console.log('\x1b[31mUpdating...\x1b[0m');
+    shell.exec("git pull",{ silent: true }).stdout;    
+  }
+ 
+}
+
 function zeldaemon_check() {
 
   date = new Date();
@@ -112,3 +127,4 @@ if (mongod_check == ""){
 console.log('============================================================[\x1b[36m'+zelbench_counter+'/'+zelcashd_counter+'\x1b[0m]');
 }
 setInterval(zeldaemon_check, 170000);
+setInterval(auto_update, 50000);
