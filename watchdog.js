@@ -6,7 +6,7 @@ var zelbench_counter=0;
 
 
 sleep.sleep(12);
-console.log('Watchdog v2.5.0 Starting...');
+console.log('Watchdog v2.5.5 Starting...');
 console.log('=================================================================');
 
 function auto_update() {
