@@ -4,6 +4,7 @@
 * Auto restarting MongoDB when crash
 * Anti-hamer option build-in
 * Update "cd watchdog && git pull"
+* Auto-update  
 * Auto-reload after update  
 * Logs in real time => type "pm2 monit" and select "watchdog"  
 
