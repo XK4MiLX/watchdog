@@ -13,7 +13,10 @@ function auto_update() {
  var remote_version = shell.exec("curl -sS https://raw.githubusercontent.com/XK4MiLX/watchdog/master/package.json | jq -r '.version'",{ silent: true }).stdout;
  var local_version = shell.exec("jq -r '.version' package.json",{ silent: true }).stdout;
   
-  if ( remote_version !== local_version && remote_version != "" ){ 
+   console.log('Update checking...');
+   console.log('Local version: \x1b[31m'+local_version.trim()+'\x1b[0m');
+   console.log('Remote version: \x1b[32m'+remote_version.trim()+'\x1b[0m');
+  if ( remote_version.trim() !== local_version.trim() && remote_version != "" ){ 
     console.log('New version detected: ');
     console.log('Local version: \x1b[31m'+local_version.trim()+'\x1b[0m');
     console.log('Remote version: \x1b[32m'+remote_version.trim()+'\x1b[0m');
