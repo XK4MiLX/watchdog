@@ -6,7 +6,7 @@ var zelbench_counter=0;
 
 
 sleep.sleep(10);
-console.log('Watchdog v2.1.0 Starting...');
+console.log('Watchdog v2.1.1 Starting...');
 console.log('=================================================================');
 function zeldaemon_check() {
 
@@ -24,6 +24,7 @@ var zelcash_node_status = shell.exec("zelcash-cli getzelnodestatus | jq '.status
 var zelbench_ddwrite = shell.exec("zelbench-cli getbenchmarks | jq '.ddwrite'",{ silent: true }).stdout;
 var zelbench_time = shell.exec("zelbench-cli getbenchmarks | jq '.time'",{ silent: true }).stdout;  
 var zelcash_last_paid_height = shell.exec("zelcash-cli getzelnodestatus | jq '.last_paid_height'",{ silent: true }).stdout;
+var mongod_check = shell.exec("pgrep mongod",{ silent: true }).stdout;
   
   
   if ( zelbench_counter > 3 || zelcashd_counter > 3 ){
@@ -50,7 +51,15 @@ console.log('Zelback status = \x1b[31mdead\x1b[0m');
 } else {
   
   if (zelback_status.trim() == '"disconnected"'){
-    console.log('Zelback status =\x1b[31m',zelback_status.trim(),'\x1b[0m');  
+    console.log('Zelback status =\x1b[31m',zelback_status.trim(),'\x1b[0m'); 
+    if (mongod_check == ""){  
+      
+       console.log('MongoDB status = \x1b[31mdead\x1b[0m'); 
+       console.log('\x1b[35mMongoDB restarting...\x1b[0m');   
+       shell.exec("sudo systemctl restart mongod",{ silent: true })  
+      
+    }
+    
   } else {    
     console.log('Zelback status =\x1b[34m',zelback_status.trim(),'\x1b[0m');
   } 
