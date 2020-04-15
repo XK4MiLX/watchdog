@@ -9,6 +9,7 @@
 
 ![screen1](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/w1pic.jpg)  
 ![screen1](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/w2pic.jpg)  
+![screen1](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/mongod.png)  
 
 <b>Any donations are welcomed and appreciated. Thanks.</b>  
 CruxID: k4mil@zel.crux  
