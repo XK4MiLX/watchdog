@@ -1,6 +1,6 @@
 {
   "name": "watchdog",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Watchdog for zelnode",
   "main": "watchdog.js",
   "dependencies": {
