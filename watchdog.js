@@ -51,15 +51,7 @@ console.log('Zelback status = \x1b[31mdead\x1b[0m');
 } else {
   
   if (zelback_status.trim() == '"disconnected"'){
-    console.log('Zelback status =\x1b[31m',zelback_status.trim(),'\x1b[0m'); 
-    if (mongod_check == ""){  
-      
-       console.log('MongoDB status = \x1b[31mdead\x1b[0m'); 
-       console.log('\x1b[35mMongoDB restarting...\x1b[0m');   
-       shell.exec("sudo systemctl restart mongod",{ silent: true })  
-      
-    }
-    
+    console.log('Zelback status =\x1b[31m',zelback_status.trim(),'\x1b[0m');    
   } else {    
     console.log('Zelback status =\x1b[34m',zelback_status.trim(),'\x1b[0m');
   } 
@@ -112,6 +104,11 @@ if (zelbench_ddwrite == ""){
 } else{
 console.log('Disk write speed =  \x1b[33m'+Number(zelbench_ddwrite.trim()).toFixed(2)+'\x1b[0m');
 } 
+if (mongod_check == ""){       
+       console.log('MongoDB status = \x1b[31mdead\x1b[0m'); 
+       console.log('\x1b[35mMongoDB restarting...\x1b[0m');   
+       shell.exec("sudo systemctl restart mongod",{ silent: true })      
+ }  
 console.log('============================================================[\x1b[36m'+zelbench_counter+'/'+zelcashd_counter+'\x1b[0m]');
 }
 setInterval(zeldaemon_check, 170000);
