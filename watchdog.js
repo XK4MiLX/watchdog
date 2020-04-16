@@ -7,7 +7,7 @@ var paid_local_time;
 
 
 sleep.sleep(12);
-console.log('Watchdog v3.0.1 Starting...');
+console.log('Watchdog v3.0.2 Starting...');
 console.log('=================================================================');
 
 function auto_update() {
