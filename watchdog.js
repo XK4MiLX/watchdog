@@ -5,7 +5,6 @@ var zelcashd_counter=0;
 var zelbench_counter=0;
 var paid_local_time;
 
-
 sleep.sleep(12);
 console.log('Watchdog v3.0.2 Starting...');
 console.log('=================================================================');
