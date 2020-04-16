@@ -3,10 +3,11 @@ var sleep = require('sleep');
 var moment = require('moment');
 var zelcashd_counter=0;
 var zelbench_counter=0;
+var paid_local_time;
 
 
 sleep.sleep(12);
-console.log('Watchdog v3.0.0 Starting...');
+console.log('Watchdog v3.0.1 Starting...');
 console.log('=================================================================');
 
 function auto_update() {
@@ -43,7 +44,10 @@ var zelcash_node_status = shell.exec("zelcash-cli getzelnodestatus | jq '.status
 var zelbench_ddwrite = shell.exec("zelbench-cli getbenchmarks | jq '.ddwrite'",{ silent: true }).stdout;
 var zelbench_time = shell.exec("zelbench-cli getbenchmarks | jq '.time'",{ silent: true }).stdout;  
 var zelcash_last_paid_height = shell.exec("zelcash-cli getzelnodestatus | jq '.last_paid_height'",{ silent: true }).stdout;
-var mongod_check = shell.exec("pgrep mongod",{ silent: true }).stdout;
+var zelcash_last_paid_height = shell.exec("zelcash-cli getzelnodestatus | jq '.last_paid_height'",{ silent: true }).stdout;
+var zelcash_last_paid_height = shell.exec("zelcash-cli getzelnodestatus | jq '.last_paid_height'",{ silent: true }).stdout;
+var activesince = shell.exec("zelcash-cli getzelnodestatus | jq -r '.activesince'",{ silent: true }).stdout;
+var lastpaid = shell.exec("zelcash-cli getzelnodestatus | jq -r '.lastpaid'",{ silent: true }).stdout;
   
   
   if ( zelbench_counter > 3 || zelcashd_counter > 3 ){
@@ -118,7 +122,24 @@ if (zelcash_last_paid_height == ""){
 } else{
 console.log('Last paid hight = \x1b[33m'+zelcash_last_paid_height.trim()+'\x1b[0m');
 } 
-  
+ 
+if (lastpaid == ""){
+console.log('Last paid time = \x1b[33m'+paid_local_time+'\x1b[0m');
+} else{
+var timestamp_paid = moment.unix(Number(lastpaid.trim()));  
+var paid_local_time = timestamp_paid.format("DD/MM/YYYY HH:mm:ss")  
+console.log('Last paid time = \x1b[33m'+paid_local_time+'\x1b[0m');
+}  
+ 
+if (activesince == ""){
+} else{
+var timestamp_active = moment.unix(Number(activesince.trim()));  
+var active_local_time = timestamp_active.format("DD/MM/YYYY HH:mm:ss")  
+console.log('Active since = \x1b[33m'+active_local_time+'\x1b[0m');
+}  
+ 
+ 
+
 if (zelbench_ddwrite == ""){
 } else{
 console.log('Disk write speed =  \x1b[33m'+Number(zelbench_ddwrite.trim()).toFixed(2)+'\x1b[0m');
