@@ -6,7 +6,7 @@ var zelbench_counter=0;
 var paid_local_time;
 
 sleep.sleep(12);
-console.log('Watchdog v3.0.2 Starting...');
+console.log('Watchdog v3.0.3 Starting...');
 console.log('=================================================================');
 
 function auto_update() {
@@ -40,8 +40,6 @@ var zelcash_check = shell.exec("zelcash-cli getinfo | jq '.version'",{ silent: t
 var zelcash_node_status = shell.exec("zelcash-cli getzelnodestatus | jq '.status'",{ silent: true }).stdout;
 var zelbench_ddwrite = shell.exec("zelbench-cli getbenchmarks | jq '.ddwrite'",{ silent: true }).stdout;
 var zelbench_time = shell.exec("zelbench-cli getbenchmarks | jq '.time'",{ silent: true }).stdout;  
-var zelcash_last_paid_height = shell.exec("zelcash-cli getzelnodestatus | jq '.last_paid_height'",{ silent: true }).stdout;
-var zelcash_last_paid_height = shell.exec("zelcash-cli getzelnodestatus | jq '.last_paid_height'",{ silent: true }).stdout;
 var zelcash_last_paid_height = shell.exec("zelcash-cli getzelnodestatus | jq '.last_paid_height'",{ silent: true }).stdout;
 var activesince = shell.exec("zelcash-cli getzelnodestatus | jq -r '.activesince'",{ silent: true }).stdout;
 var lastpaid = shell.exec("zelcash-cli getzelnodestatus | jq -r '.lastpaid'",{ silent: true }).stdout;
