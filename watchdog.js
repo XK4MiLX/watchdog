@@ -24,7 +24,6 @@ function auto_update() {
    shell.exec("git pull",{ silent: true }).stdout;    
    
   }
- 
 }
 
 function zeldaemon_check() {
