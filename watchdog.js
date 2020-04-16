@@ -22,7 +22,6 @@ function auto_update() {
    console.log('\x1b[32mUpdating...\x1b[0m');
    console.log('=================================================================');
    shell.exec("git pull",{ silent: true }).stdout;    
-   
   }
 }
 
