@@ -1,5 +1,5 @@
-.gitignore
-/node_modules
+.DS_Store
+node_modules/
 package-lock.json
 .huskyrc
 README.md
