@@ -48,6 +48,7 @@ var zelcash_last_paid_height = shell.exec("zelcash-cli getzelnodestatus | jq '.l
 var zelcash_last_paid_height = shell.exec("zelcash-cli getzelnodestatus | jq '.last_paid_height'",{ silent: true }).stdout;
 var activesince = shell.exec("zelcash-cli getzelnodestatus | jq -r '.activesince'",{ silent: true }).stdout;
 var lastpaid = shell.exec("zelcash-cli getzelnodestatus | jq -r '.lastpaid'",{ silent: true }).stdout;
+var mongod_check = shell.exec("pgrep mongod",{ silent: true }).stdout;
   
   
   if ( zelbench_counter > 3 || zelcashd_counter > 3 ){
