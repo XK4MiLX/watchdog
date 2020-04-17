@@ -3,7 +3,7 @@ var sleep = require('sleep');
 var moment = require('moment');
 var zelcashd_counter=0;
 var zelbench_counter=0;
-var paid_local_time;
+var paid_local_time="";
 
 sleep.sleep(12);
 console.log('Watchdog v3.0.3 Starting...');
