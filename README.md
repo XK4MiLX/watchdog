@@ -11,7 +11,7 @@
 <b>How correct start, stop, restart watchdog</b>
 * Start -> pm2 start watchdog <b>--watch</b> 
 * Stop -> pm2 stop watchdog  
-* Restart -> pm2 reload watchdog <b>--watch</b>
+* Restart -> pm2 reload watchdog <b>--watch</b>  
 
 ![screen1](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/w1pic.jpg)  
 ![screen1](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/w2pic.jpg)  
