@@ -96,9 +96,9 @@ console.log('Zelbench benchmark status = \x1b[31mdead\x1b[0m');
 } else {
   
   if (zelbench_status.trim() == '"toaster"' || zelbench_status.trim() == '"failed"'){
-    console.log('Zelbench benchmark status =\x1b[31m',zelbench_status.trim(),'\x1b[0m');  
+    console.log('Benchmark status =\x1b[31m',zelbench_benchmark_status.trim(),'\x1b[0m');  
   } else {    
-    console.log('Zelbench benchmark status =\x1b[34m',zelbench_status.trim(),'\x1b[0m');
+    console.log('Benchmark status =\x1b[34m',zelbench_benchmark_status.trim(),'\x1b[0m');
   } 
 } 
   
