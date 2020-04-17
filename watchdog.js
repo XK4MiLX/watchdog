@@ -119,8 +119,8 @@ if (zelcash_last_paid_height.trim() == "null" || zelcash_last_paid_height == "")
 console.log('Last paid hight = \x1b[33m'+zelcash_last_paid_height.trim()+'\x1b[0m');
 } 
  
-console.log(lastpaid.trim());
-if (lastpaid.trim() == "Invalid date" || lastpaid == ""){
+
+if (lastpaid.trim() == "null" || lastpaid == ""){
 console.log('Last paid time = \x1b[33m'+paid_local_time+'\x1b[0m');
 } else{
 var timestamp_paid = moment.unix(Number(lastpaid.trim()));  
@@ -128,7 +128,7 @@ var paid_local_time = timestamp_paid.format("DD/MM/YYYY HH:mm:ss")
 console.log('Last paid time = \x1b[33m'+paid_local_time+'\x1b[0m');
 }  
  
-if (activesince.trim() == "Invalid date" || activesince == "" ){
+if (activesince.trim() == "null" || activesince == "" ){
 } else{
 var timestamp_active = moment.unix(Number(activesince.trim()));  
 var active_local_time = timestamp_active.format("DD/MM/YYYY HH:mm:ss")  
