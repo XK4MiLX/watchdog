@@ -35,7 +35,8 @@ function zeldaemon_check() {
 
 console.log('Summary Report / Time: '+data_time );
 console.log('=================================================================');
-var zelbench_status = shell.exec("zelbench-cli getstatus | jq '.benchmarking'",{ silent: true }).stdout;
+var zelbench_status = shell.exec("zelbench-cli getstatus | jq '.status'",{ silent: true }).stdout;
+var zelbench_benchmark_status = shell.exec("zelbench-cli getstatus | jq '.benchmarking'",{ silent: true }).stdout;
 var zelback_status = shell.exec("zelbench-cli getstatus | jq '.zelback'",{ silent: true }).stdout;
 var zelcash_check = shell.exec("zelcash-cli getinfo | jq '.version'",{ silent: true }).stdout;
 var zelcash_node_status = shell.exec("zelcash-cli getzelnodestatus | jq '.status'",{ silent: true }).stdout;
@@ -76,15 +77,28 @@ console.log('Zelback status = \x1b[31mdead\x1b[0m');
     console.log('Zelback status =\x1b[34m',zelback_status.trim(),'\x1b[0m');
   } 
 }
-  
-if (zelbench_status == ""){
+ 
+ if (zelbench_status == ""){
 console.log('Zelbench status = \x1b[31mdead\x1b[0m');
 } else {
   
-  if (zelbench_status.trim() == '"toaster"' || zelbench_status.trim() == '"failed"'){
-    console.log('Zelbench status =\x1b[31m',zelbench_status.trim(),'\x1b[0m');  
+  if (zelbench_status.trim() == '"online"'){
+    console.log('Zelbench status =\x1b[32m',zelbench_status.trim(),'\x1b[0m');  
   } else {    
-    console.log('Zelbench status =\x1b[34m',zelbench_status.trim(),'\x1b[0m');
+    console.log('Zelbench status =\x1b[31m',zelbench_status.trim(),'\x1b[0m');
+  } 
+ 
+} 
+ 
+  
+if (zelbench_benchmark_status == ""){
+console.log('Zelbench benchmark status = \x1b[31mdead\x1b[0m');
+} else {
+  
+  if (zelbench_status.trim() == '"toaster"' || zelbench_status.trim() == '"failed"'){
+    console.log('Zelbench benchmark status =\x1b[31m',zelbench_status.trim(),'\x1b[0m');  
+  } else {    
+    console.log('Zelbench benchmark status =\x1b[34m',zelbench_status.trim(),'\x1b[0m');
   } 
 } 
   
@@ -99,7 +113,8 @@ shell.exec("sudo fuser -k 16125/tcp",{ silent: true })
 shell.exec("sudo systemctl start zelcash",{ silent: true })
 console.log('\x1b[35mZelcash restarting...\x1b[0m'); 
 }
-if ( zelbench_status.trim() == '"toaster"' || zelbench_status.trim() == '"failed"' ){
+ 
+if ( zelbench_benchmark_status.trim() == '"toaster"' || zelbench_benchmark_status.trim() == '"failed"' ){
 ++zelbench_counter;
 shell.exec("zelbench-cli restartnodebenchmarks",{ silent: true });
 console.log('\x1b[35mZelbench restarting...\x1b[0m'); 
