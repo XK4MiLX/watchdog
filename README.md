@@ -5,7 +5,12 @@
 * Anti-hamer option build-in
 * Update "cd watchdog && git pull"
 * Auto-update && auto-reload after update  
-* Logs in real time => type "pm2 monit" and select "watchdog"  
+* Logs in real time => type "pm2 monit" and select "watchdog"
+
+<b>IMPORTANT: </b>  
+* Start -> pm2 start watchdog --watch  
+* Stop -> pm2 stop watchdog  
+* Restart -> pm2 reload watchdog --watch  
 
 ![screen1](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/w1pic.jpg)  
 ![screen1](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/w2pic.jpg)  
