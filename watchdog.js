@@ -36,6 +36,15 @@ function zeldaemon_check() {
 console.log('Summary Report / Time: '+data_time );
 console.log('=================================================================');
 
+ 
+ if ( zelbench_counter > 3 || zelcashd_counter > 3 ){
+    console.log('\x1b[34mWatchdog shutdowning....\x1b[0m');
+    console.log('\x1b[34mReason: Failed more then 4 time in rows.\x1b[0m');
+    console.log('=================================================================');
+    shell.exec("pm2 stop watchdog",{ silent: true });
+    process.exit(1);
+ }
+ 
 try{
     var zelbench_getstatus_info = JSON.parse(shell.exec("zelbench-cli getstatus",{ silent: true }).stdout);
     var zelbench_status = zelbench_getstatus_info.status;
@@ -72,14 +81,6 @@ try{
 }
 
 var mongod_check = shell.exec("pgrep mongod",{ silent: true }).stdout;
-
-  if ( zelbench_counter > 3 || zelcashd_counter > 3 ){
-    console.log('\x1b[34mWatchdog shutdowning....\x1b[0m');
-    console.log('\x1b[34mReason: Failed more then 4 time in rows.\x1b[0m');
-    console.log('=================================================================');
-    shell.exec("pm2 stop watchdog",{ silent: true });
-    process.exit(1);
-  }
 
 if (zelcash_node_status == "" || typeof zelcash_node_status == "undefined" ){
   console.log('Zelnode status = \x1b[31mdead\x1b[0m');
