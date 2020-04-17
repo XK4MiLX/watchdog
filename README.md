@@ -7,7 +7,7 @@
 * Auto-update && auto-reload after update  
 * Logs in real time => type "pm2 monit" and select "watchdog"
 
-<b>IMPORTANT</b> -> how correct start, stop, restart  
+<b>IMPORTANT -> how correct start, stop, restart  </b>
 * Start -> pm2 start watchdog --watch  
 * Stop -> pm2 stop watchdog  
 * Restart -> pm2 reload watchdog --watch``
