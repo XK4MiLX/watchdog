@@ -114,12 +114,12 @@ var bench_local_time = timestamp.format("DD/MM/YYYY HH:mm:ss")
 console.log('Last benchmark time = \x1b[33m'+bench_local_time+'\x1b[0m');
 } 
   
-if (zelcash_last_paid_height == ""){
+if (zelcash_last_paid_height == "null" || zelcash_last_paid_height == ""){
 } else{
 console.log('Last paid hight = \x1b[33m'+zelcash_last_paid_height.trim()+'\x1b[0m');
 } 
  
-if (lastpaid == ""){
+if (lastpaid == "Invalid Date" || lastpaid == ""){
 console.log('Last paid time = \x1b[33m'+paid_local_time+'\x1b[0m');
 } else{
 var timestamp_paid = moment.unix(Number(lastpaid.trim()));  
@@ -127,13 +127,12 @@ var paid_local_time = timestamp_paid.format("DD/MM/YYYY HH:mm:ss")
 console.log('Last paid time = \x1b[33m'+paid_local_time+'\x1b[0m');
 }  
  
-if (activesince == ""){
+if (activesince == "Invalid Date" || activesince == "" ){
 } else{
 var timestamp_active = moment.unix(Number(activesince.trim()));  
 var active_local_time = timestamp_active.format("DD/MM/YYYY HH:mm:ss")  
 console.log('Active since = \x1b[33m'+active_local_time+'\x1b[0m');
 }  
- 
  
 
 if (zelbench_ddwrite == ""){
