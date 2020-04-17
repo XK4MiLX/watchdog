@@ -7,7 +7,7 @@ global.paid_local_time="N/A";
 
 
 sleep.sleep(12);
-console.log('Watchdog v3.0.5 Starting...');
+console.log('Watchdog v3.1.0 Starting...');
 console.log('=================================================================');
 
 function auto_update() {
@@ -133,7 +133,8 @@ var timestamp = moment.unix(Number(zelbench_time));
 var bench_local_time = timestamp.format("DD/MM/YYYY HH:mm:ss")
 console.log('Last benchmark time = \x1b[33m'+bench_local_time+'\x1b[0m');
 var next_benchmark_time = moment(timestamp, 'DD/MM/YYYY HH:mm:ss').add(durationInMinutes, 'minutes').format('DD/MM/YYYY HH:mm:ss');
-console.log('Next benchmark time = \x1b[33m'+next_benchmark_time+'\x1b[0m');
+var time_left = moment(moment(next_benchmark_time, "HH:mm:ss").diff(moment(new Date(), "HH:mm:ss")).format("mm:ss")
+console.log('Next benchmark time = \x1b[33m'+next_benchmark_time+' (left: '+time_left+')\x1b[0m');
 }
 
 if (zelcash_last_paid_height  == "null" || zelcash_last_paid_height == "" || typeof zelcash_last_paid_height == "undefined"){
