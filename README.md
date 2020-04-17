@@ -1,4 +1,5 @@
 # Watchdog for ZelNode
+<b>What watchdog can do:</b>
 * Auto restarting zelcash daemon when crash  
 * Auto restarting benchmark when "failed" or "taoster"
 * Auto restarting MongoDB when crash
