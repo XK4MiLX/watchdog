@@ -190,5 +190,5 @@ if (mongod_check == ""){
  }
 console.log('============================================================[\x1b[36m'+zelbench_counter+'/'+zelcashd_counter+'\x1b[0m]');
 }
-setInterval(zeldaemon_check, 1700000);
+setInterval(zeldaemon_check, 170000);
 setInterval(auto_update, 10800000);
