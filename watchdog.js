@@ -6,7 +6,7 @@ var zelbench_counter=0;
 global.paid_local_time="N/A";
 
 
-sleep.sleep(12);
+sleep.sleep(15);
 console.log('Watchdog v3.0.5 Starting...');
 console.log('=================================================================');
 
@@ -35,16 +35,36 @@ function zeldaemon_check() {
 
 console.log('Summary Report / Time: '+data_time );
 console.log('=================================================================');
-var zelbench_status = shell.exec("zelbench-cli getstatus | jq '.status'",{ silent: true }).stdout;
-var zelbench_benchmark_status = shell.exec("zelbench-cli getstatus | jq '.benchmarking'",{ silent: true }).stdout;
-var zelback_status = shell.exec("zelbench-cli getstatus | jq '.zelback'",{ silent: true }).stdout;
-var zelcash_check = shell.exec("zelcash-cli getinfo | jq '.version'",{ silent: true }).stdout;
-var zelcash_node_status = shell.exec("zelcash-cli getzelnodestatus | jq '.status'",{ silent: true }).stdout;
-var zelbench_ddwrite = shell.exec("zelbench-cli getbenchmarks | jq '.ddwrite'",{ silent: true }).stdout;
-var zelbench_time = shell.exec("zelbench-cli getbenchmarks | jq '.time'",{ silent: true }).stdout;  
-var zelcash_last_paid_height = shell.exec("zelcash-cli getzelnodestatus | jq '.last_paid_height'",{ silent: true }).stdout;
-var activesince = shell.exec("zelcash-cli getzelnodestatus | jq -r '.activesince'",{ silent: true }).stdout;
-var lastpaid = shell.exec("zelcash-cli getzelnodestatus | jq -r '.lastpaid'",{ silent: true }).stdout;
+ 
+// var zelbench_status = shell.exec("zelbench-cli getstatus | jq '.status'",{ silent: true }).stdout;
+// var zelback_status = shell.exec("zelbench-cli getstatus | jq '.zelback'",{ silent: true }).stdout;
+// var zelbench_benchmark_status = shell.exec("zelbench-cli getstatus | jq '.benchmarking'",{ silent: true }).stdout;
+ 
+// var zelbench_ddwrite = shell.exec("zelbench-cli getbenchmarks | jq '.ddwrite'",{ silent: true }).stdout;
+// var zelbench_time = shell.exec("zelbench-cli getbenchmarks | jq '.time'",{ silent: true }).stdout;  
+ 
+// var zelcash_check = shell.exec("zelcash-cli getinfo | jq '.version'",{ silent: true }).stdout; 
+ 
+// var zelcash_node_status = shell.exec("zelcash-cli getzelnodestatus | jq '.status'",{ silent: true }).stdout;
+// var zelcash_last_paid_height = shell.exec("zelcash-cli getzelnodestatus | jq '.last_paid_height'",{ silent: true }).stdout;
+// var activesince = shell.exec("zelcash-cli getzelnodestatus | jq -r '.activesince'",{ silent: true }).stdout;
+// var lastpaid = shell.exec("zelcash-cli getzelnodestatus | jq -r '.lastpaid'",{ silent: true }).stdout;
+  
+
+ 
+var zelbench_getstatus_info = shell.exec("zelbench-cli getstatus",{ silent: true }).stdout;
+var zelbench_getbenchmarks_info = shell.exec("zelbench-cli getbenchmarks",{ silent: true }).stdout;
+var zelcash_getinfo_info = shell.exec("zelcash-cli getinfo",{ silent: true }).stdout;  
+var zelcash_getzelnodestatus_info = shell.exec("zelcash-cli getzelnodestatus",{ silent: true }).stdout;
+ 
+ var lastpaid1 = zelcash_getzelnodestatus_info.data.lastpaid;
+ var lastpaid2=JSON.parse(zelcash_getzelnodestatus_info).data.lastpaid;
+     
+ console.log('\x1b[34m'+lastpaid1+'\x1b[0m');
+ console.log('\x1b[34m'+lastpaid2+'\x1b[0m');
+ 
+ process.exit(1);
+ 
 var mongod_check = shell.exec("pgrep mongod",{ silent: true }).stdout;
   
   
