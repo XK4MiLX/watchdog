@@ -108,11 +108,14 @@ else{
 zelbench_counter=0;
 }
   
-if (zelbench_time == ""){
+if (zelbench_time.trim() == "null" || zelbench_time == ""){
 } else{
+const durationInMinutes = '30';
 var timestamp = moment.unix(Number(zelbench_time.trim()));  
 var bench_local_time = timestamp.format("DD/MM/YYYY HH:mm:ss")  
 console.log('Last benchmark time = \x1b[33m'+bench_local_time+'\x1b[0m');
+var next_benchmark_time = moment(bench_local_time, 'DD/MM/YYYY HH:mm:ss').add(durationInMinutes, 'minutes').format('DD/MM/YYYY HH:mm:ss');
+console.log('Next benchmark time = \x1b[33m'+bench_local_time+'\x1b[0m');
 } 
   
 if (zelcash_last_paid_height.trim() == "null" || zelcash_last_paid_height == ""){
