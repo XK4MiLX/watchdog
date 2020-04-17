@@ -119,6 +119,7 @@ if (zelcash_last_paid_height.trim() == "null" || zelcash_last_paid_height == "")
 console.log('Last paid hight = \x1b[33m'+zelcash_last_paid_height.trim()+'\x1b[0m');
 } 
  
+console.log(lastpaid.trim());
 if (lastpaid.trim() == "Invalid date" || lastpaid == ""){
 console.log('Last paid time = \x1b[33m'+paid_local_time+'\x1b[0m');
 } else{
