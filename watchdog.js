@@ -3,7 +3,7 @@ var sleep = require('sleep');
 var moment = require('moment');
 var zelcashd_counter=0;
 var zelbench_counter=0;
-global.paid_local_time="---";
+var paid_local_time="";
 
 
 sleep.sleep(12);
@@ -125,7 +125,7 @@ if (lastpaid.trim() == "null" || lastpaid == ""){
 console.log('Last paid time = \x1b[33m'+paid_local_time+'\x1b[0m');
 } else{
 var timestamp_paid = moment.unix(Number(lastpaid.trim()));  
-paid_local_time = timestamp_paid.format("DD/MM/YYYY HH:mm:ss")  
+var paid_local_time = timestamp_paid.format("DD/MM/YYYY HH:mm:ss")  
 console.log('Last paid time = \x1b[33m'+paid_local_time+'\x1b[0m');
 }  
  
