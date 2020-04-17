@@ -36,35 +36,21 @@ function zeldaemon_check() {
 console.log('Summary Report / Time: '+data_time );
 console.log('=================================================================');
  
-// var zelbench_status = shell.exec("zelbench-cli getstatus | jq '.status'",{ silent: true }).stdout;
-// var zelback_status = shell.exec("zelbench-cli getstatus | jq '.zelback'",{ silent: true }).stdout;
-// var zelbench_benchmark_status = shell.exec("zelbench-cli getstatus | jq '.benchmarking'",{ silent: true }).stdout;
+var zelbench_getstatus_info = JSON.parse(shell.exec("zelbench-cli getstatus",{ silent: true }).stdout);
+var zelbench_getbenchmarks_info = JSON.parse(shell.exec("zelbench-cli getbenchmarks",{ silent: true }).stdout);
+var zelcash_getinfo_info = JSON.parse(shell.exec("zelcash-cli getinfo",{ silent: true }).stdout);  
+var zelcash_getzelnodestatus_info = JSON.parse(shell.exec("zelcash-cli getzelnodestatus",{ silent: true }).stdout);
  
-// var zelbench_ddwrite = shell.exec("zelbench-cli getbenchmarks | jq '.ddwrite'",{ silent: true }).stdout;
-// var zelbench_time = shell.exec("zelbench-cli getbenchmarks | jq '.time'",{ silent: true }).stdout;  
- 
-// var zelcash_check = shell.exec("zelcash-cli getinfo | jq '.version'",{ silent: true }).stdout; 
- 
-// var zelcash_node_status = shell.exec("zelcash-cli getzelnodestatus | jq '.status'",{ silent: true }).stdout;
-// var zelcash_last_paid_height = shell.exec("zelcash-cli getzelnodestatus | jq '.last_paid_height'",{ silent: true }).stdout;
-// var activesince = shell.exec("zelcash-cli getzelnodestatus | jq -r '.activesince'",{ silent: true }).stdout;
-// var lastpaid = shell.exec("zelcash-cli getzelnodestatus | jq -r '.lastpaid'",{ silent: true }).stdout;
-  
-
- 
-var zelbench_getstatus_info = shell.exec("zelbench-cli getstatus",{ silent: true }).stdout;
-var zelbench_getbenchmarks_info = shell.exec("zelbench-cli getbenchmarks",{ silent: true }).stdout;
-var zelcash_getinfo_info = shell.exec("zelcash-cli getinfo",{ silent: true }).stdout;  
-var zelcash_getzelnodestatus_info = shell.exec("zelcash-cli getzelnodestatus",{ silent: true }).stdout;
- 
- var lastpaid1 = zelcash_getzelnodestatus_info.data.lastpaid;
- var lastpaid2=JSON.parse(zelcash_getzelnodestatus_info).data.lastpaid;
-     
- console.log('\x1b[34m'+lastpaid1+'\x1b[0m');
- console.log('\x1b[34m'+lastpaid2+'\x1b[0m');
- 
- process.exit(1);
- 
+var zelbench_status = zelbench_getstatus_info.status;
+var zelback_status = zelbench_getstatus_info.zelback;
+var zelbench_benchmark_status = zelbench_getstatus_info.benchmarking; 
+var  zelbench_ddwrite = zelbench_getbenchmarks_info.ddwrite;
+var zelbench_time = zelbench_getbenchmarks_info.time;
+var zelcash_check = zelcash_getinfo_info.version;
+var zelcash_node_status = zelcash_getzelnodestatus_info.status
+var zelcash_last_paid_height = zelcash_getzelnodestatus_info.last_paid_height
+var activesince = zelcash_getzelnodestatus_info.activesince
+var lastpaid = zelcash_getzelnodestatus_info.lastpaid  
 var mongod_check = shell.exec("pgrep mongod",{ silent: true }).stdout;
   
   
@@ -76,10 +62,10 @@ var mongod_check = shell.exec("pgrep mongod",{ silent: true }).stdout;
     process.exit(1);
   } 
   
-if (zelcash_node_status == ""){
+if (zelcash_node_status == "" || zelcash_node_status == "undefined" ){
   console.log('Zelnode status = \x1b[31mdead\x1b[0m');  
 } else {  
-  if ( zelcash_node_status.trim() == '"expired"'){
+  if ( zelcash_node_status.trim() == "expired"){
     console.log('Zelnode status =\x1b[31m',zelcash_node_status.trim(), '\x1b[0m');
    }
   else {
@@ -87,22 +73,22 @@ if (zelcash_node_status == ""){
    }   
 }
   
-if (zelback_status == ""){
+if (zelback_status == "" || zelback_status == "undefined"){
 console.log('Zelback status = \x1b[31mdead\x1b[0m');
 } else {
   
-  if (zelback_status.trim() == '"disconnected"'){
+  if (zelback_status.trim() == "disconnected"){
     console.log('Zelback status =\x1b[31m',zelback_status.trim(),'\x1b[0m');    
   } else {    
     console.log('Zelback status =\x1b[34m',zelback_status.trim(),'\x1b[0m');
   } 
 }
  
- if (zelbench_status == ""){
+ if (zelbench_status == "" || zelbench_status == "undefined"){
 console.log('Zelbench status = \x1b[31mdead\x1b[0m');
 } else {
   
-  if (zelbench_status.trim() == '"online"'){
+  if (zelbench_status.trim() == "online"){
     console.log('Zelbench status =\x1b[32m',zelbench_status.trim(),'\x1b[0m');  
   } else {    
     console.log('Zelbench status =\x1b[31m',zelbench_status.trim(),'\x1b[0m');
@@ -111,11 +97,11 @@ console.log('Zelbench status = \x1b[31mdead\x1b[0m');
 } 
  
   
-if (zelbench_benchmark_status == ""){
+if (zelbench_benchmark_status == "" || zelbench_benchmark_status == "undefined"){
 console.log('Zelbench benchmark status = \x1b[31mdead\x1b[0m');
 } else {
   
-  if (zelbench_status.trim() == '"toaster"' || zelbench_status.trim() == '"failed"'){
+  if (zelbench_status.trim() == "toaster" || zelbench_status.trim() == "failed"){
     console.log('Benchmark status =\x1b[31m',zelbench_benchmark_status.trim(),'\x1b[0m');  
   } else {    
     console.log('Benchmark status =\x1b[34m',zelbench_benchmark_status.trim(),'\x1b[0m');
@@ -134,7 +120,7 @@ shell.exec("sudo systemctl start zelcash",{ silent: true })
 console.log('\x1b[35mZelcash restarting...\x1b[0m'); 
 }
  
-if ( zelbench_benchmark_status.trim() == '"toaster"' || zelbench_benchmark_status.trim() == '"failed"' ){
+if ( zelbench_benchmark_status.trim() == "toaster" || zelbench_benchmark_status.trim() == "failed" ){
 ++zelbench_counter;
 shell.exec("zelbench-cli restartnodebenchmarks",{ silent: true });
 console.log('\x1b[35mZelbench restarting...\x1b[0m'); 
@@ -143,7 +129,7 @@ else{
 zelbench_counter=0;
 }
   
-if (zelbench_time.trim() == "null" || zelbench_time == ""){
+if (zelbench_time.trim() == "null" || zelbench_time == "" || zelbench_time == "undefined"){
 } else{
 const durationInMinutes = '30';
 var timestamp = moment.unix(Number(zelbench_time.trim()));  
@@ -153,13 +139,13 @@ var next_benchmark_time = moment(timestamp, 'DD/MM/YYYY HH:mm:ss').add(durationI
 console.log('Next benchmark time = \x1b[33m'+next_benchmark_time+'\x1b[0m');
 } 
   
-if (zelcash_last_paid_height.trim() == "null" || zelcash_last_paid_height == ""){
+if (zelcash_last_paid_height.trim() == "null" || zelcash_last_paid_height == "" || zelcash_last_paid_height == "undefined"){
 } else{
 console.log('Last paid hight = \x1b[33m'+zelcash_last_paid_height.trim()+'\x1b[0m');
 } 
  
 
-if (lastpaid.trim() == "null" || lastpaid == ""){
+if (lastpaid.trim() == "null" || lastpaid == "" || lastpaid == "undefined"){
 console.log('Last paid time = \x1b[33m'+paid_local_time+'\x1b[0m');
 } else{
 var timestamp_paid = moment.unix(Number(lastpaid.trim()));  
@@ -167,7 +153,7 @@ paid_local_time = timestamp_paid.format("DD/MM/YYYY HH:mm:ss")
 console.log('Last paid time = \x1b[33m'+paid_local_time+'\x1b[0m');
 }  
  
-if (activesince.trim() == "null" || activesince == "" ){
+if (activesince.trim() == "null" || activesince == "" || activesince == "undefined"){
 } else{
 var timestamp_active = moment.unix(Number(activesince.trim()));  
 var active_local_time = timestamp_active.format("DD/MM/YYYY HH:mm:ss")  
@@ -175,7 +161,7 @@ console.log('Active since = \x1b[33m'+active_local_time+'\x1b[0m');
 }  
  
 
-if (zelbench_ddwrite == ""){
+if (zelbench_ddwrite == "" || zelbench_ddwrite == "undefined"){
 } else{
 console.log('Disk write speed =  \x1b[33m'+Number(zelbench_ddwrite.trim()).toFixed(2)+'\x1b[0m');
 } 
