@@ -8,9 +8,9 @@
 * Logs in real time => type "pm2 monit" and select "watchdog"
 
 <b>How correct start, stop, restart watchdog</b>
-* Start -> pm2 start watchdog --watch  
+* Start -> pm2 start watchdog <b>--watch</b> 
 * Stop -> pm2 stop watchdog  
-* Restart -> pm2 reload watchdog --watch``
+* Restart -> pm2 reload watchdog <b>--watch</b>
 
 ![screen1](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/w1pic.jpg)  
 ![screen1](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/w2pic.jpg)  
