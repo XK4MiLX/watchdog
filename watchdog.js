@@ -38,31 +38,31 @@ console.log('=================================================================')
 
 
 try{
-    global.zelbench_getstatus_info = JSON.parse(shell.exec("zelbench-cli getstatus",{ silent: true }).stdout);
+    const zelbench_getstatus_info = JSON.parse(shell.exec("zelbench-cli getstatus",{ silent: true }).stdout);
     return zelbench_getstatus_info;
-}catch (err){
-    console.log(error(err.message));
+}catch {
+    return false;
 }
  
  try{
-    global.zelbench_getbenchmarks_info = JSON.parse(shell.exec("zelbench-cli getbenchmarks",{ silent: true }).stdout);
+    const zelbench_getbenchmarks_info = JSON.parse(shell.exec("zelbench-cli getbenchmarks",{ silent: true }).stdout);
     return zelbench_getbenchmarks_info;
-}catch (err){
-   console.log(error(err.message));
+}catch {
+ return false;
 }
  
  try{
-    global.zelcash_getinfo_info = JSON.parse(shell.exec("zelcash-cli getinfo",{ silent: true }).stdout);
+    const zelcash_getinfo_info = JSON.parse(shell.exec("zelcash-cli getinfo",{ silent: true }).stdout);
     return zelcash_getinfo_info;
-}catch (err){
-    console.log(error(err.message));
+}catch {
+ return false;  
 }
  
  try{
-    global.zelcash_getzelnodestatus_info = JSON.parse(shell.exec("zelcash-cli getzelnodestatus",{ silent: true }).stdout);
+    const zelcash_getzelnodestatus_info = JSON.parse(shell.exec("zelcash-cli getzelnodestatus",{ silent: true }).stdout);
     return zelcash_getzelnodestatus_info;
-}catch (err){
-    console.log(error(err.message));
+}catch {
+    return false;
 }
  
 
