@@ -38,7 +38,7 @@ console.log('=================================================================')
 
 
 try{
-    var zelbench_getstatus_info = JSON.parse(JSON.stringify(shell.exec("zelbench-cli getstatus",{ silent: true }).stdout));
+    var zelbench_getstatus_info = JSON.parse(shell.exec("zelbench-cli getstatus",{ silent: true }).stdout);
     return zelbench_getstatus_info;
 }catch (err){
     return "";
