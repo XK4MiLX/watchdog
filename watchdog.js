@@ -1,9 +1,14 @@
+var db_info = require('./config.js');
 var shell = require('shelljs');
 var sleep = require('sleep');
 var moment = require('moment');
 var zelcashd_counter=0;
 var zelbench_counter=0;
 global.paid_local_time="N/A";
+
+console.log(db_info.ip);
+console.log('=================================================================');
+console.log('=================================================================');
 
 sleep.sleep(12);
 console.log('Watchdog v3.1.0 Starting...');
