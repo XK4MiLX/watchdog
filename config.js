@@ -1,5 +1,5 @@
 module.exports = {
-    ip: 'dbip',
-    user: 'dbusername',
-    password: 'dbpass'
+    ip: 'db_ip',
+    user: 'db_username',
+    password: 'db_pass'
 }
