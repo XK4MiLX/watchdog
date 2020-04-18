@@ -4,7 +4,9 @@
   "description": "Watchdog for zelnode",
   "main": "watchdog.js",
   "dependencies": {
+    "fs": "0.0.1-security",
     "moment": "^2.24.0",
+    "mysql": "^2.18.1",
     "shelljs": "^0.8.3",
     "sleep": "^6.1.0"
   },
