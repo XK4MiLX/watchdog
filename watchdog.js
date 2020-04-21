@@ -169,8 +169,11 @@ console.log('Zelcash status = \x1b[32mrunning\x1b[0m');
 else {
 ++zelcashd_counter;
 console.log('Zelcash status = \x1b[31mdead\x1b[0m');
+
+shell.exec("sudo systemctl stop zelcash",{ silent: true })
+sleep.sleep(2);
 shell.exec("sudo fuser -k 16125/tcp",{ silent: true })
-shell.exec("sudo systemctl start zelcash",{ silent: true })
+shell.exec("zelcashd",{ silent: true })
 console.log('\x1b[35mZelcash restarting...\x1b[0m');
 }
 
