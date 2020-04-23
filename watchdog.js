@@ -6,7 +6,7 @@ var zelbench_counter=0;
 global.paid_local_time="N/A";
 
 sleep.sleep(12);
-console.log('Watchdog v3.1.0 Starting...');
+console.log('Watchdog v3.1.1 Starting...');
 console.log('=================================================================');
 
 function auto_update() {
@@ -27,12 +27,12 @@ function auto_update() {
 
 function zeldaemon_check() {
 
-  date = new Date();
-  data_time= new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().
-  replace(/T/, ' ').
-  replace(/\..+/, '');
+ 
+const data_time_utc = moment.utc().format('YYYY-MM-DD HH:mm:ss');
+const stillUtc = moment.utc(data_time_utc).toDate();
+const local = moment(stillUtc).local().format('YYYY-MM-DD HH:mm:ss');
 
-console.log('Summary Report / Time: '+data_time );
+console.log('Summary Report / UTC_Time: '+data_time_utc+' Local_Time: '+local );
 console.log('=================================================================');
 
  
