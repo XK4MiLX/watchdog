@@ -4,3 +4,4 @@ package-lock.json
 .huskyrc
 README.md
 watchdog_error.log
+config.js
