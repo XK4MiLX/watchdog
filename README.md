@@ -4,9 +4,14 @@
 * Auto restarting benchmark when "failed" or "taoster"
 * Auto restarting MongoDB when crash
 * Anti-hamer option build-in
-* Update "cd watchdog && git pull"
 * Auto-update && auto-reload after update  
 * Logs in real time => type "pm2 monit" and select "watchdog"
+
+<b>Coming soon...</b>
+* Log file with error events
+* Sleep mode replace watchdog shoutdown
+* Service status check
+* Zelflux error.log analyzing
 
 <b>How correct start, stop, restart watchdog</b>
 * Start -> pm2 start watchdog <b>--watch</b> 
