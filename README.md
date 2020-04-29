@@ -5,7 +5,7 @@
 * Auto restarting MongoDB when crash
 * Anti-hamer option build-in
 * Auto-update && auto-reload after update  
-* Logs in real time => type "pm2 monit" and select "watchdog"
+* Logs in real time => type "pm2 monit" and select "watchdog"  
 <b>Coming soon...</b>
 * Log file with error events
 * Sleep mode replace watchdog shoutdown
