@@ -8,7 +8,7 @@
 * Logs in real time => type "pm2 monit" and select "watchdog"  
 
 <b>Coming soon...</b>
-* Log file with error events
+* Log file with error events (watchdog_error.log)
 * Sleep mode replace watchdog shoutdown
 * Service status check
 * Zelflux error.log analyzing
