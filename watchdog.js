@@ -76,7 +76,7 @@ var  update_info = shell.exec("ps aux | grep 'apt' | wc -l",{ silent: true }).st
 
 // console.log(update_info);
 
-if ( update_info > 1 ) {
+if ( update_info > 2 ) {
   console.log('Update detected...');
   console.log('Watchdog in sleep mode => \x1b[34m'+data_time_utc+'\x1b[0m');
   console.log('=================================================================');
