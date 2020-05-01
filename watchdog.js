@@ -80,7 +80,7 @@ if ( update_info  > 1 ) {
   console.log('Update detected...');
   console.log('Watchdog in sleep mode => \x1b[34m'+data_time_utc+'\x1b[0m');
   console.log('=================================================================');
-  sleep.sleep(300000);
+  sleep.sleep(300);
   return;
 }
 
