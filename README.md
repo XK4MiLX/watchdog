@@ -9,7 +9,6 @@
 * Log file with error events (watchdog_error.log)
 * Sleep mode replace watchdog shoutdown
 * Service status check
-* Zelflux error.log analyzing
 
 <b>How correct start, stop, restart watchdog</b>
 * Start -> pm2 start watchdog <b>--watch</b> 
