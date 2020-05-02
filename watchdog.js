@@ -88,7 +88,7 @@ if ( service_inactive.trim() == "inactive" ) {
   console.log('Zelcash service status: \x1b[31minactive\x1b[0m');
   console.log('Watchdog in sleep mode => \x1b[34m'+data_time_utc+'\x1b[0m');
   ++inactive_counter;
-  console.log('============================================================[\x1b[36m'+inactive_counter+'/3+'\x1b[0m]');
+  console.log('============================================================[\x1b[36m'+inactive_counter+'/3\x1b[0m]');
   if ( inactive_counter > 2 ) {
      shell.exec("sudo fuser -k 16125/tcp",{ silent: true })
      shell.exec("sudo systemctl start zelcash",{ silent: true })
