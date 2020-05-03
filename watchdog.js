@@ -42,7 +42,7 @@ function error(args) {
 
 
 sleep.sleep(12);
-console.log('Watchdog v3.5.0 Starting...');
+console.log('Watchdog v3.5.1 Starting...');
 console.log('=================================================================');
 
 
