@@ -100,6 +100,7 @@ if ( service_inactive.trim() == "inactive" ) {
      shell.exec("sudo fuser -k 16125/tcp",{ silent: true })
      shell.exec("sudo systemctl start zelcash",{ silent: true })
      inactive_counter=0; 
+     return;
    } else {
     return; 
    }
