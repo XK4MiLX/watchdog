@@ -1,7 +1,5 @@
 # Watchdog for ZelNode
 <b>How install watchdog:</b> 
-
-Run script via terminal
 ```bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/multitoolbox.sh)```  
 
 ![screen2](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/watchdog01.jpg)
