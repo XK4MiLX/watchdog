@@ -2,8 +2,8 @@
 <b>How install watchdog:</b>  
 ![screen2](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/watchdog01.jpg)
 
-1) Use option "2" for new installation diuring install process anser yes when will ask about watchdog install
-2) For existing node installation use option "4"
+* Use option "2" for new installation diuring install process anser yes when will ask about watchdog install
+* For existing node installation use option "4"
 
 <b>Watchdog options:</b>
 * Auto restart zelcash daemon when crash  
