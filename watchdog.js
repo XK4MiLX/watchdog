@@ -93,13 +93,13 @@ console.log('=================================================================')
        break;
 
        default:
-       var  tire_name="UNKNOW";
-       var eps_limit = 0;
+       var  tire_name="UNKNO";
+       var eps_limit = 90;
 
   }
 
 } else {
-    var eps_limit = 0;
+    var eps_limit = 90;
     var  tire_name="UNKNOW";
   }
 
@@ -170,8 +170,6 @@ function getFilesizeInBytes(filename) {
 
 function error(args) {
   try {
-    //console.error(args);
-    // write to file
     const filepath = `watchdog_error.log`;
     const size = getFilesizeInBytes(filepath);
     let flag = 'a+';
@@ -263,6 +261,7 @@ console.log(`Zelcash current: \x1b[34m${zelcash_remote_version.trim()}\x1b[0m in
 
      var zelcash_dpkg_version_before = shell.exec("dpkg -l zelcash | grep -w 'zelcash' | awk '{print $3}'",{ silent: true }).stdout;
      shell.exec("sudo systemctl stop zelcash",{ silent: true })
+     sleep.sleep(2);
      shell.exec("sudo fuser -k 16125/tcp",{ silent: true })
      shell.exec("sudo apt-get update",{ silent: true })
      shell.exec("sudo apt-get install zelcash -y",{ silent: true })
@@ -314,6 +313,7 @@ console.log(`Zelbench current: \x1b[34m${zelbench_remote_version.trim()}\x1b[0m 
 
    var zelbench_dpkg_version_before = shell.exec("dpkg -l zelbench | grep -w 'zelbench' | awk '{print $3}'",{ silent: true }).stdout;
    shell.exec("sudo systemctl stop zelcash",{ silent: true })
+   sleep.sleep(2);   
    shell.exec("sudo fuser -k 16125/tcp",{ silent: true })
    shell.exec("sudo apt-get update",{ silent: true })
    shell.exec("sudo apt-get install zelbench -y",{ silent: true })
@@ -324,7 +324,7 @@ console.log(`Zelbench current: \x1b[34m${zelbench_remote_version.trim()}\x1b[0m 
 
      if ( (zelbench_dpkg_version_before !== zelbench_dpkg_version_after) && zelbench_dpkg_version_after != "" ){
         console.log('\x1b[32mUpdate successfully.\x1b[0m');
-       console.log(' ');
+        console.log(' ');
         sleep.sleep(2);
      } else {
         // shell.exec("./home/$USER/update_zelbench.sh",{ silent: true }).stdout;
