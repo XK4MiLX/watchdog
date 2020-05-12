@@ -1,5 +1,5 @@
 # Watchdog for ZelNode
-<b>Why watchdog</b>
+<b>Watchdog options:</b>
 * Auto restart zelcash daemon when crash  
 * Auto restart benchmark when "failed" or "taoster"
 * Auto restart when eps drop belown minim. limit for tier
