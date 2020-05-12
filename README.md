@@ -1,4 +1,7 @@
 # Watchdog for ZelNode
+<b>How install watchdog:</b>  
+![screen2](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/watchdog01.jpg)
+
 <b>Watchdog options:</b>
 * Auto restart zelcash daemon when crash  
 * Auto restart benchmark when "failed" or "taoster"
