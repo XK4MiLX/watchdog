@@ -4,7 +4,7 @@ const moment = require('moment');
 const fs = require('fs');
 
 sleep.sleep(15);
-console.log('Watchdog v4.0.0 Starting...');
+console.log('Watchdog v4.0.1 Starting...');
 console.log('=================================================================');
 
 const path = './config.js';
@@ -207,9 +207,16 @@ if ( remote_version.trim() != "" && local_version.trim() != "" ){
    console.log('=================================================================');
    console.log('Local version: \x1b[34m'+local_version.trim()+'\x1b[0m');
    console.log('Remote version: \x1b[32m'+remote_version.trim()+'\x1b[0m');
-   console.log('\x1b[32mUpdating...\x1b[0m');
-   console.log(' ');
+   console.log('=================================================================');
    shell.exec("cd /home/$USER/watchdog && git pull",{ silent: true }).stdout;
+   
+   var local_ver = shell.exec("jq -r '.version' package.json",{ silent: true }).stdout;
+   if ( local_ver.trim() == remote_version.trim() ){
+      console.log('\x1b[32mUpdate successfully.\x1b[0m');
+   }
+   
+   console.log(' ');
+   
   }
 }
 
@@ -218,17 +225,22 @@ if (config.zelflux_update == "1") {
    var zelflux_remote_version = shell.exec("curl -sS https://raw.githubusercontent.com/zelcash/zelflux/master/package.json | jq -r '.version'",{ silent: true }).stdout;
    var zelflux_local_version = shell.exec("jq -r '.version' /home/$USER/zelflux/package.json",{ silent: true }).stdout;
 
-console.log(`Zelflux current: \x1b[34m${zelflux_remote_version.trim()}\x1b[0m installed: \x1b[32m${zelflux_local_version.trim()}\x1b[0m`);
+   console.log(`Zelflux current: \x1b[34m${zelflux_remote_version.trim()}\x1b[0m installed: \x1b[32m${zelflux_local_version.trim()}\x1b[0m`);
    if ( zelflux_remote_version.trim() != "" && zelflux_local_version.trim() != "" ){
 
      if ( zelflux_remote_version.trim() !== zelflux_local_version.trim() ){
        console.log('\x1b[34mNew zelflux version detected:\x1b[0m');
        console.log('=================================================================');
-       console.log('Local version: \x1b[34m'+local_version.trim()+'\x1b[0m');
-       console.log('Remote version: \x1b[32m'+remote_version.trim()+'\x1b[0m');
-       console.log('\x1b[32mUpdating...\x1b[0m');
-       console.log(' ');
+       console.log('Local version: \x1b[34m'+zelflux_local_version.trim()+'\x1b[0m');
+       console.log('Remote version: \x1b[32m'+zelflux_remote_version.trim()+'\x1b[0m');
+       console.log('=================================================================');
        shell.exec("cd /home/$USER/zelflux && git pull",{ silent: true }).stdout;
+       var zelflux_lv = shell.exec("jq -r '.version' /home/$USER/zelflux/package.json",{ silent: true }).stdout;
+       if ( zelflux_remote_version.trim() == zelflux_lv.trim() ) {
+          console.log('\x1b[32mUpdate successfully.\x1b[0m');
+          sleep.sleep(2);
+        }
+       console.log(' ');
     }
    }
   }
@@ -247,8 +259,8 @@ console.log(`Zelcash current: \x1b[34m${zelcash_remote_version.trim()}\x1b[0m in
    if ( zelcash_remote_version.trim() !== zelcash_local_version.trim() ){
      console.log('\x1b[34mNew zelcash version detected:\x1b[0m');
      console.log('=================================================================');
-     console.log('Local version: \x1b[34m'+local_version.trim()+'\x1b[0m');
-     console.log('Remote version: \x1b[32m'+remote_version.trim()+'\x1b[0m');
+     console.log('Local version: \x1b[34m'+zelcash_local_version.trim()+'\x1b[0m');
+     console.log('Remote version: \x1b[32m'+zelcash_remote_version.trim()+'\x1b[0m');
 
      var  update_info = shell.exec("ps aux | grep 'apt' | wc -l",{ silent: true }).stdout;
 
@@ -291,8 +303,7 @@ if (config.zelbench_update == "1") {
  var zelbench_remote_version = shell.exec("curl -sS https://zelcore.io/zelflux/zelbenchinfo.php | jq -r '.version'",{ silent: true }).stdout;
  var zelbench_local_version = shell.exec("zelbench-cli getinfo | jq -r '.version'",{ silent: true }).stdout;
 
-console.log(`Zelbench current: \x1b[34m${zelbench_remote_version.trim()}\x1b[0m installed: \x1b[32m${zelbench_local_version.trim()}\x1b[0m`);
-
+ console.log(`Zelbench current: \x1b[34m${zelbench_remote_version.trim()}\x1b[0m installed: \x1b[32m${zelbench_local_version.trim()}\x1b[0m`);
 
   if ( zelbench_remote_version.trim() != "" && zelbench_local_version.trim() != "" ){
 
@@ -324,7 +335,7 @@ console.log(`Zelbench current: \x1b[34m${zelbench_remote_version.trim()}\x1b[0m 
 
      if ( (zelbench_dpkg_version_before !== zelbench_dpkg_version_after) && zelbench_dpkg_version_after != "" ){
         console.log('\x1b[32mUpdate successfully.\x1b[0m');
-       console.log(' ');
+        console.log(' ');
         sleep.sleep(2);
      } else {
         // shell.exec("./home/$USER/update_zelbench.sh",{ silent: true }).stdout;
