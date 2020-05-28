@@ -578,9 +578,9 @@ if ( zelbench_benchmark_status == "toaster" || zelbench_benchmark_status == "fai
   ++zelbench_counter;
   var error_line=shell.exec("egrep -a --color 'Failed' /home/$USER/.zelbenchmark/debug.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//'",{ silent: true });
   error('Benchmark problem detected! Zelbench status: '+zelbench_benchmark_status);
-  error('Reason: '+error_line);
+  error('Reason: '+error_line.trim());
   console.log('\x1b[35mBenchmark problem detected! Zelbench status: '+zelbench_benchmark_status+'\x1b[0m');
-  console.log('\x1b[35mReason: '+error_line+'\x1b[0m');
+  console.log('\x1b[35mReason: '+error_line.trim()+'\x1b[0m');
   console.log(data_time_utc+' => \x1b[35mZelbench restarting...\x1b[0m');
   shell.exec("zelbench-cli restartnodebenchmarks",{ silent: true });
 }
