@@ -4,7 +4,7 @@ const moment = require('moment');
 const fs = require('fs');
 
 sleep.sleep(15);
-console.log('Watchdog v4.0.2 Starting...');
+console.log('Watchdog v4.0.3 Starting...');
 console.log('=================================================================');
 
 const path = './config.js';
