@@ -1,4 +1,4 @@
-# Watchdog for ZelNode
+# Watchdog for FluxNode
 <b>How install watchdog:</b>   
 ```bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/multitoolbox.sh)```  
 
@@ -8,7 +8,7 @@
 * For existing node installation use option "4"
 
 <b>Watchdog options:</b>
-* Auto restart zelcash daemon when crash  
+* Auto restart daemon when crash  
 * Auto restart benchmark when "failed" or "taoster"
 * Auto restart when eps drop belown minim. limit for tier
 * Auto restart MongoDB when crash
