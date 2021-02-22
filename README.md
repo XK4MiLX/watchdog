@@ -1,4 +1,4 @@
-# Watchdog for FluxNode
+# WATCHDOG FOR FLUXNODE
 <b>How install watchdog:</b>   
 ```bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/multitoolbox.sh)```  
 
