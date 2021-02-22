@@ -2,7 +2,7 @@
 <b>How install watchdog:</b>   
 ```bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/multitoolbox.sh)```  
 
-![screen2](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/watchdog01.jpg)
+![screen2](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/w_menu.jpg)
 
 * Use option "2" for new installation diuring install process anser yes when will ask about watchdog install
 * For existing node installation use option "4"
