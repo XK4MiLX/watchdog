@@ -4,7 +4,7 @@ const moment = require('moment');
 const fs = require('fs');
 
 sleep.sleep(15);
-console.log('Watchdog v4.0.3 Starting...');
+console.log('Watchdog v4.0.5 Starting...');
 console.log('=================================================================');
 
 const path = './config.js';
@@ -13,6 +13,11 @@ if (fs.existsSync(path)) {
 
   var  home_dir = shell.exec("echo $HOME",{ silent: true }).stdout;
   var  zelcash_path = `${home_dir.trim()}/.zelcash/zelcash.conf`;
+  
+   if (!fs.existsSync(zelcash_path)) {      
+     zelcash_path = `${home_dir.trim()}/.flux/flux.conf`;     
+   }
+  
 
   if (fs.existsSync(zelcash_path)) {
    var tx_hash = shell.exec("grep -w zelnodeoutpoint "+zelcash_path+" | sed -e 's/zelnodeoutpoint=//'",{ silent: true }).stdout;
@@ -70,6 +75,10 @@ console.log('=================================================================')
 
   var  home_dir = shell.exec("echo $HOME",{ silent: true }).stdout;
   var  zelcash_path = `${home_dir.trim()}/.zelcash/zelcash.conf`;
+  
+   if (!fs.existsSync(zelcash_path)) {      
+     zelcash_path = `${home_dir.trim()}/.flux/flux.conf`;     
+   }
 
   if (fs.existsSync(zelcash_path)) {
    var tx_hash = shell.exec("grep -w zelnodeoutpoint "+zelcash_path+" | sed -e 's/zelnodeoutpoint=//'",{ silent: true }).stdout;
@@ -430,6 +439,9 @@ try{
     var zelbench_getstatus_info = JSON.parse(shell.exec("zelbench-cli getstatus",{ silent: true }).stdout);
     var zelbench_status = zelbench_getstatus_info.status;
     var zelback_status = zelbench_getstatus_info.zelback;
+    if ( zelback_status.trim() == "null" ){
+      zelback_status = zelbench_getstatus_info.flux;
+    }
     var zelbench_benchmark_status = zelbench_getstatus_info.benchmarking;
 
  }catch {
