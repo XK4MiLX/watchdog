@@ -1,22 +1,63 @@
 const shell = require('shelljs');
 const sleep = require('sleep');
 const moment = require('moment');
+const webhook = require("webhook-discord")
 const fs = require('fs');
 
+
 sleep.sleep(15);
-console.log('Watchdog v4.0.0 Starting...');
+console.log('Watchdog v5.0.0 Starting...');
 console.log('=================================================================');
 
-const path = './config.js';
+const path = 'config.js';
+
+function discord_hook(node_error,web_hook_url){
+  
+  if (typeof web_hook_url !== "undefined" && web_hook_url !== "0" ) { 
+  
+    var node_ip = shell.exec("curl -sk -m 10 ifconfig.me",{ silent: true })  
+    const Hook = new webhook.Webhook(`${web_hook_url}`);
+    const msg = new webhook.MessageBuilder()
+    .setName("Flux Watchdog")
+    .setTitle(':loudspeaker: **FluxNode Alert**')
+    .addField('IP:', node_ip)
+    .addField('Error:', node_error)
+    .setColor('#ea1414')
+    .setThumbnail('https://fluxnodeservice.com/favicon.png');
+     Hook.send(msg); 
+   }  
+  
+ }
+
+
+
 
 if (fs.existsSync(path)) {
 
   var  home_dir = shell.exec("echo $HOME",{ silent: true }).stdout;
   var  zelcash_path = `${home_dir.trim()}/.zelcash/zelcash.conf`;
+  var daemon_cli='zelcash-cli';
+  var daemon_package_name='zelcash';
+   
+  if (!fs.existsSync(zelcash_path)) {      
+     zelcash_path = `${home_dir.trim()}/.flux/flux.conf`;     
+     daemon_cli='flux-cli';
+     daemon_package_name='flux';
+   }
+  
+  
+  if (fs.existsSync(`/usr/local/bin/fluxbenchd`)) {        
+     bench_cli='fluxbench-cli';
+     bench_package_name='fluxbench';
+   } else {
+     bench_cli='zelbench-cli';
+     bench_package_name='zelbench';     
+   }
+  
 
   if (fs.existsSync(zelcash_path)) {
    var tx_hash = shell.exec("grep -w zelnodeoutpoint "+zelcash_path+" | sed -e 's/zelnodeoutpoint=//'",{ silent: true }).stdout;
-   var exec_comment = `zelcash-cli decoderawtransaction $(zelcash-cli getrawtransaction ${tx_hash} ) | jq '.vout[].value' | egrep '10000|25000|100000'`
+   var exec_comment = `${daemon_cli} decoderawtransaction $(${daemon_cli} getrawtransaction ${tx_hash} ) | jq '.vout[].value' | egrep '10000|25000|100000'`
    var type = shell.exec(`${exec_comment}`,{ silent: true }).stdout;
 
    switch(Number(type.trim())){
@@ -45,35 +86,60 @@ if (fs.existsSync(path)) {
 
 var config = require('./config.js');
 var eps_limit=config.tier_eps_min;
+var web_hook_url=config.web_hook_url;
 
 console.log('Config file:');
 console.log(`Tier: ${tire_name}`);
 console.log(`Minimum eps: ${eps_limit}`);
+if (typeof web_hook_url !== "undefined" && web_hook_url !== "0" )
+{ 
+console.log('Discord alert:  enabled');   
+} else {
+console.log('Discord alert:  disabled'); 
+}
 console.log(`Update settings:`);
 if ( config.zelcash_update == "1" ) {
-console.log('=> Zelcash:  \x1b[32menabled\x1b[0m');
+console.log('=> Flux daemon:  enabled');
 } else {
-console.log('=> Zelcash:  \x1b[31mdisabled\x1b[0m');
+console.log('=> Flux daemon:  disabled');
 }
 if ( config.zelbench_update == "1" ) {
-console.log('=> Zelbench: \x1b[32menabled\x1b[0m');
+console.log('=> Fluxbench: enabled');
 } else {
-console.log('=> Zelbench: \x1b[31mdisabled\x1b[0m');
+console.log('=> Fluxbench: disabled');
 }
 if ( config.zelflux_update == "1" ) {
-console.log('=> Zelflux:  \x1b[32menabled\x1b[0m');
+console.log('=> FluxOS:  enabled');
 } else {
-console.log('=> Zelflux:  \x1b[31mdisabled\x1b[0m');
+console.log('=> FluxOS:  disabled');
 }
 console.log('=================================================================');
 } else {
 
   var  home_dir = shell.exec("echo $HOME",{ silent: true }).stdout;
   var  zelcash_path = `${home_dir.trim()}/.zelcash/zelcash.conf`;
-
+  var daemon_cli='zelcash-cli';
+  var daemon_package_name='zelcash';
+  
+  if (!fs.existsSync(zelcash_path)) {      
+     zelcash_path = `${home_dir.trim()}/.flux/flux.conf`;     
+     daemon_cli='flux-cli';
+     daemon_package_name='flux';
+   }
+  
+  
+  if (fs.existsSync(`/usr/local/bin/fluxbenchd`)) {        
+     bench_cli='fluxbench-cli';
+     bench_package_name='fluxbench';
+   } else {
+     bench_cli='zelbench-cli';
+     bench_package_name='zelbench';     
+   }
+  
+  
   if (fs.existsSync(zelcash_path)) {
    var tx_hash = shell.exec("grep -w zelnodeoutpoint "+zelcash_path+" | sed -e 's/zelnodeoutpoint=//'",{ silent: true }).stdout;
-   var exec_comment = `zelcash-cli decoderawtransaction $(zelcash-cli getrawtransaction ${tx_hash} ) | jq '.vout[].value' | egrep '10000|25000|100000'`
+   var exec_comment = `${daemon_cli} decoderawtransaction $(${daemon_cli} getrawtransaction ${tx_hash} ) | jq '.vout[].value' | egrep '10000|25000|100000'`
    var type = shell.exec(`${exec_comment}`,{ silent: true }).stdout;
 
    switch(Number(type.trim())){
@@ -93,13 +159,13 @@ console.log('=================================================================')
        break;
 
        default:
-       var  tire_name="UNKNO";
-       var eps_limit = 90;
+       var  tire_name="UNKNOW";
+       var eps_limit = 0;
 
   }
 
 } else {
-    var eps_limit = 90;
+    var eps_limit = 0;
     var  tire_name="UNKNOW";
   }
 
@@ -108,7 +174,8 @@ console.log('=================================================================')
     tier_eps_min: '${eps_limit}',
     zelflux_update: '0',
     zelcash_update: '0',
-    zelbench_update: '0'
+    zelbench_update: '0',
+    web_hook_url: '0'
 }`;
 
 console.log('Creating config file...');
@@ -120,27 +187,33 @@ console.log("========================");
       userconfig.end();
     });
 
-
+sleep.sleep(3);
 var config = require('./config.js');
 
 console.log('Config file:');
 console.log(`Tier: ${tire_name}`);
 console.log(`Minimum eps: ${eps_limit}`);
+if (typeof web_hook_url !== "undefined" && web_hook_url !== "0" )
+{ 
+console.log('Discord alert:  enabled');   
+} else {
+console.log('Discord alert:  disabled'); 
+}
 console.log(`Update settings:`);
 if ( config.zelcash_update == "1" ) {
-console.log('=> Zelcash:  \x1b[32menabled\x1b[0m');
+console.log('=> Flux daemon:  enabled');
 } else {
-console.log('=> Zelcash:  \x1b[31mdisabled\x1b[0m');
+console.log('=> Flux daemon:  disabled');
 }
 if ( config.zelbench_update == "1" ) {
-console.log('=> Zelbench: \x1b[32menabled\x1b[0m');
+console.log('=> Fluxbench: enabled');
 } else {
-console.log('=> Zelbench: \x1b[31mdisabled\x1b[0m');
+console.log('=> Fluxbench: disabled');
 }
 if ( config.zelflux_update == "1" ) {
-console.log('=> Zelflux:  \x1b[32menabled\x1b[0m');
+console.log('=> FluxOS:  enabled');
 } else {
-console.log('=> Zelflux:  \x1b[31mdisabled\x1b[0m');
+console.log('=> FluxOS:  disabled');
 }
 console.log('=================================================================');
 
@@ -170,6 +243,8 @@ function getFilesizeInBytes(filename) {
 
 function error(args) {
   try {
+    //console.error(args);
+    // write to file
     const filepath = `watchdog_error.log`;
     const size = getFilesizeInBytes(filepath);
     let flag = 'a+';
@@ -191,23 +266,31 @@ function auto_update() {
 
  delete require.cache[require.resolve('./config.js')];
  var config = require('./config.js');
- var remote_version = shell.exec("curl -sS https://raw.githubusercontent.com/XK4MiLX/watchdog/master/package.json | jq -r '.version'",{ silent: true }).stdout;
+ var remote_version = shell.exec("curl -sS https://raw.githubusercontent.com/RunOnFlux/fluxnode-watchdog/master/package.json | jq -r '.version'",{ silent: true }).stdout;
  var local_version = shell.exec("jq -r '.version' package.json",{ silent: true }).stdout;
 
 console.log(' UPDATE CHECKING....');
 console.log('=================================================================');
 
-console.log(`Watchdog current: \x1b[34m${remote_version.trim()}\x1b[0m installed: \x1b[32m${local_version.trim()}\x1b[0m`);
+console.log(`Watchdog current: ${remote_version.trim()} installed: ${local_version.trim()}`);
 
 if ( remote_version.trim() != "" && local_version.trim() != "" ){
  if ( remote_version.trim() !== local_version.trim()){
-   console.log('\x1b[34mNew watchdog version detected:\x1b[0m');
+   console.log('New watchdog version detected:');
    console.log('=================================================================');
-   console.log('Local version: \x1b[34m'+local_version.trim()+'\x1b[0m');
-   console.log('Remote version: \x1b[32m'+remote_version.trim()+'\x1b[0m');
-   console.log('\x1b[32mUpdating...\x1b[0m');
-   console.log(' ');
+   console.log('Local version: '+local_version.trim());
+   console.log('Remote version: '+remote_version.trim());
+   console.log('=================================================================');
    shell.exec("cd /home/$USER/watchdog && git pull",{ silent: true }).stdout;
+   
+   var local_ver = shell.exec("jq -r '.version' package.json",{ silent: true }).stdout;
+   if ( local_ver.trim() == remote_version.trim() ){
+      console.log('Update successfully.');
+      sleep.sleep(2);
+   }
+   
+   console.log(' ');
+   
   }
 }
 
@@ -216,37 +299,42 @@ if (config.zelflux_update == "1") {
    var zelflux_remote_version = shell.exec("curl -sS https://raw.githubusercontent.com/zelcash/zelflux/master/package.json | jq -r '.version'",{ silent: true }).stdout;
    var zelflux_local_version = shell.exec("jq -r '.version' /home/$USER/zelflux/package.json",{ silent: true }).stdout;
 
-console.log(`Zelflux current: \x1b[34m${zelflux_remote_version.trim()}\x1b[0m installed: \x1b[32m${zelflux_local_version.trim()}\x1b[0m`);
+   console.log(`FluxOS current: ${zelflux_remote_version.trim()} installed: ${zelflux_local_version.trim()}`);
    if ( zelflux_remote_version.trim() != "" && zelflux_local_version.trim() != "" ){
 
      if ( zelflux_remote_version.trim() !== zelflux_local_version.trim() ){
-       console.log('\x1b[34mNew zelflux version detected:\x1b[0m');
+       console.log('New FluxOS version detected:');
        console.log('=================================================================');
-       console.log('Local version: \x1b[34m'+local_version.trim()+'\x1b[0m');
-       console.log('Remote version: \x1b[32m'+remote_version.trim()+'\x1b[0m');
-       console.log('\x1b[32mUpdating...\x1b[0m');
-       console.log(' ');
+       console.log('Local version: '+zelflux_local_version.trim());
+       console.log('Remote version: '+zelflux_remote_version.trim());
+       console.log('=================================================================');
        shell.exec("cd /home/$USER/zelflux && git pull",{ silent: true }).stdout;
+       var zelflux_lv = shell.exec("jq -r '.version' /home/$USER/zelflux/package.json",{ silent: true }).stdout;
+       if ( zelflux_remote_version.trim() == zelflux_lv.trim() ) {
+          console.log('Update successfully.');
+          sleep.sleep(2);
+        }
+       console.log(' ');
     }
    }
   }
 
 if (config.zelcash_update == "1") {
 
-   var zelcash_remote_version = shell.exec("curl -sS https://zelcore.io/zelflux/zelcashinfo.php | jq -r '.version'",{ silent: true }).stdout;
-   var zelcash_local_version = shell.exec("zelcash-cli getinfo | jq -r '.version'",{ silent: true }).stdout;
+   var zelcash_remote_version = shell.exec("curl -s -m 5 https://apt.runonflux.io/pool/main/f/flux/ | grep -o '[0-9].[0-9].[0-9]' | head -n1",{ silent: true }).stdout;
+   var zelcash_local_version = shell.exec(`dpkg -l flux | grep -w flux | awk '{print $3}'`,{ silent: true }).stdout;
 
 
-console.log(`Zelcash current: \x1b[34m${zelcash_remote_version.trim()}\x1b[0m installed: \x1b[32m${zelcash_local_version.trim()}\x1b[0m`);
+console.log(`Flux daemon current: ${zelcash_remote_version.trim()} installed: ${zelcash_local_version.trim()}`);
 
 
  if ( zelcash_remote_version.trim() != "" && zelcash_local_version.trim() != "" ){
 
    if ( zelcash_remote_version.trim() !== zelcash_local_version.trim() ){
-     console.log('\x1b[34mNew zelcash version detected:\x1b[0m');
+     console.log('New Flux daemon version detected:');
      console.log('=================================================================');
-     console.log('Local version: \x1b[34m'+local_version.trim()+'\x1b[0m');
-     console.log('Remote version: \x1b[32m'+remote_version.trim()+'\x1b[0m');
+     console.log('Local version: '+zelcash_local_version.trim());
+     console.log('Remote version: '+zelcash_remote_version.trim());
 
      var  update_info = shell.exec("ps aux | grep 'apt' | wc -l",{ silent: true }).stdout;
 
@@ -258,25 +346,21 @@ console.log(`Zelcash current: \x1b[34m${zelcash_remote_version.trim()}\x1b[0m in
 
       }
 
-
-     var zelcash_dpkg_version_before = shell.exec("dpkg -l zelcash | grep -w 'zelcash' | awk '{print $3}'",{ silent: true }).stdout;
+     var zelcash_dpkg_version_before = shell.exec(`dpkg -l flux | grep -w flux | awk '{print $3}'`,{ silent: true }).stdout;
      shell.exec("sudo systemctl stop zelcash",{ silent: true })
-     sleep.sleep(2);
      shell.exec("sudo fuser -k 16125/tcp",{ silent: true })
      shell.exec("sudo apt-get update",{ silent: true })
-     shell.exec("sudo apt-get install zelcash -y",{ silent: true })
-     var zelcash_dpkg_version_after = shell.exec("dpkg -l zelcash | grep -w 'zelcash' | awk '{print $3}'",{ silent: true }).stdout;
+     shell.exec("sudo apt-get install flux -y",{ silent: true })
+     var zelcash_dpkg_version_after = shell.exec(`dpkg -l flux | grep -w flux | awk '{print $3}'`,{ silent: true }).stdout;
      sleep.sleep(2);
      shell.exec("sudo systemctl start zelcash",{ silent: true })
 
        if ( (zelcash_dpkg_version_before !== zelcash_dpkg_version_after) && zelcash_dpkg_version_after != "" ){
-          console.log('\x1b[32mUpdate successfully.\x1b[0m');
+          console.log('Update successfully.');
           console.log(' ');
           sleep.sleep(2);
        } else {
-          //shell.exec("./home/$USER/update_zelcash.sh",{ silent: true }).stdout;
-         console.log('\x1b[32mScript called.\x1b[0m');
-         // console.log('\x1b[32mUpdate successfully.\x1b[0m');
+         console.log('Script called.');
          console.log(' ');
           sleep.sleep(2);
        }
@@ -287,19 +371,19 @@ console.log(`Zelcash current: \x1b[34m${zelcash_remote_version.trim()}\x1b[0m in
 
 if (config.zelbench_update == "1") {
 
- var zelbench_remote_version = shell.exec("curl -sS https://zelcore.io/zelflux/zelbenchinfo.php | jq -r '.version'",{ silent: true }).stdout;
- var zelbench_local_version = shell.exec("zelbench-cli getinfo | jq -r '.version'",{ silent: true }).stdout;
+ var zelbench_remote_version = shell.exec("curl -s -m 5 https://apt.runonflux.io/pool/main/f/fluxbench/ | grep -o '[0-9].[0-9].[0-9]' | head -n1",{ silent: true }).stdout;
+ var zelbench_local_version = shell.exec("dpkg -l fluxbench | grep -w fluxbench | awk '{print $3}'",{ silent: true }).stdout;
+ 
 
-console.log(`Zelbench current: \x1b[34m${zelbench_remote_version.trim()}\x1b[0m installed: \x1b[32m${zelbench_local_version.trim()}\x1b[0m`);
-
+ console.log(`Fluxbench current: ${zelbench_remote_version.trim()} installed: ${zelbench_local_version.trim()}`);
 
   if ( zelbench_remote_version.trim() != "" && zelbench_local_version.trim() != "" ){
 
     if ( zelbench_remote_version.trim() !== zelbench_local_version.trim() ){
-     console.log('\x1b[34mNew zelbench version detected:\x1b[0m');
+     console.log('New Fluxbench version detected:');
      console.log('=================================================================');
-     console.log('Local version: \x1b[34m'+zelbench_local_version.trim()+'\x1b[0m');
-     console.log('Remote version: \x1b[32m'+zelbench_remote_version.trim()+'\x1b[0m');
+     console.log('Local version: '+zelbench_local_version.trim());
+     console.log('Remote version: '+zelbench_remote_version.trim());
      console.log('=================================================================');
 
       if ( update_info > 2 ) {
@@ -311,25 +395,22 @@ console.log(`Zelbench current: \x1b[34m${zelbench_remote_version.trim()}\x1b[0m 
      }
 
 
-   var zelbench_dpkg_version_before = shell.exec("dpkg -l zelbench | grep -w 'zelbench' | awk '{print $3}'",{ silent: true }).stdout;
+   var zelbench_dpkg_version_before = shell.exec(`dpkg -l fluxbench | grep -w fluxbench | awk '{print $3}'`,{ silent: true }).stdout;
    shell.exec("sudo systemctl stop zelcash",{ silent: true })
-   sleep.sleep(2);   
    shell.exec("sudo fuser -k 16125/tcp",{ silent: true })
    shell.exec("sudo apt-get update",{ silent: true })
-   shell.exec("sudo apt-get install zelbench -y",{ silent: true })
+   shell.exec("sudo apt-get install fluxbench -y",{ silent: true })
    sleep.sleep(2);
    shell.exec("sudo systemctl start zelcash",{ silent: true })   
       
-   var zelbench_dpkg_version_after = shell.exec("dpkg -l zelbench | grep -w 'zelbench' | awk '{print $3}'",{ silent: true }).stdout;
+   var zelbench_dpkg_version_after = shell.exec(`dpkg -l fluxbench | grep -w fluxbench | awk '{print $3}'`,{ silent: true }).stdout;
 
      if ( (zelbench_dpkg_version_before !== zelbench_dpkg_version_after) && zelbench_dpkg_version_after != "" ){
-        console.log('\x1b[32mUpdate successfully.\x1b[0m');
+        console.log('Update successfully.');
         console.log(' ');
         sleep.sleep(2);
      } else {
-        // shell.exec("./home/$USER/update_zelbench.sh",{ silent: true }).stdout;
-        console.log('\x1b[32mScript called.\x1b[0m');
-       // console.log('\x1b[32mUpdate successfully.\x1b[0m');
+        console.log('Script called.');
         console.log(' ');
         sleep.sleep(2);
      }
@@ -343,7 +424,11 @@ console.log('=================================================================')
 }
 
 function zeldaemon_check() {
-
+  
+  delete require.cache[require.resolve('./config.js')];
+  var config = require('./config.js');
+  web_hook_url=config.web_hook_url;
+  
   const service_inactive = shell.exec("systemctl list-units --full -all | grep 'zelcash' | grep -o 'inactive'",{ silent: true }).stdout;
   const data_time_utc = moment.utc().format('YYYY-MM-DD HH:mm:ss');
   const stillUtc = moment.utc(data_time_utc).toDate();
@@ -352,24 +437,21 @@ function zeldaemon_check() {
   console.log('UTC: '+data_time_utc+' | LOCAL: '+local );
   console.log('=================================================================');
 
-
 var  update_info = shell.exec("ps aux | grep 'apt' | wc -l",{ silent: true }).stdout;
-
-// console.log(update_info);
 
 if ( update_info > 2 ) {
   console.log('Update detected...');
-  console.log('Watchdog in sleep mode => \x1b[34m'+data_time_utc+'\x1b[0m');
+  console.log('Watchdog in sleep mode => '+data_time_utc);
   console.log('=================================================================');
   return;
 }
 
 if ( service_inactive.trim() == "inactive" ) {
-  console.log('Zelcash service status: \x1b[31minactive\x1b[0m');
-  console.log('Watchdog in sleep mode => \x1b[34m'+data_time_utc+'\x1b[0m');
+  console.log('Flux daemon service status: inactive');
+  console.log('Watchdog in sleep mode => '+data_time_utc);
   ++inactive_counter;
-  console.log('============================================================[\x1b[36m'+inactive_counter+'/3\x1b[0m]');
-  if ( inactive_counter > 2 ) {
+  console.log('============================================================['+inactive_counter+']');
+  if ( inactive_counter > 6 ) {
      shell.exec("sudo fuser -k 16125/tcp",{ silent: true })
      shell.exec("sudo systemctl start zelcash",{ silent: true })
      inactive_counter=0;
@@ -382,9 +464,9 @@ if ( service_inactive.trim() == "inactive" ) {
 if ( zelbench_counter > 2 || zelcashd_counter > 2 ){
 
   try{
-    var  zelcash_getinfo_info = JSON.parse(shell.exec("zelcash-cli getinfo",{ silent: true }).stdout);
+    var  zelcash_getinfo_info = JSON.parse(shell.exec(`${daemon_cli} getinfo`,{ silent: true }).stdout);
     var zelcash_check = zelcash_getinfo_info.version;
-    var zelbench_getstatus_info = JSON.parse(shell.exec("zelbench-cli getstatus",{ silent: true }).stdout);
+    var zelbench_getstatus_info = JSON.parse(shell.exec(`${bench_cli} getstatus`,{ silent: true }).stdout);
     var zelbench_benchmark_status = zelbench_getstatus_info.benchmarking;
   } catch {
 
@@ -395,9 +477,9 @@ if ( zelbench_counter > 2 || zelcashd_counter > 2 ){
       watchdog_sleep="1";
      
      if ( zelcashd_counter > 2 ) { 
-       error('Watchdog in sleep mode! Zelcash status: \x1b[31mnot responding\x1b[0m');
+       error('Watchdog in sleep mode! Flux daemon status: not responding');
       } else { 
-       error('Watchdog in sleep mode! Zelbench status: \x1b[31m'+zelbench_benchmark_status+'\x1b[0m');   
+       error('Watchdog in sleep mode! Fluxbench status: '+zelbench_benchmark_status);   
       }
      
    }   
@@ -408,7 +490,7 @@ if ( zelbench_counter > 2 || zelcashd_counter > 2 ){
           watchdog_sleep="N/A" 
    } else {
   
-        console.log('Watchdog in sleep mode => \x1b[34m'+data_time_utc+'\x1b[0m');
+        console.log('Watchdog in sleep mode => '+data_time_utc);
         console.log('================================================================='); 
         return;
    }
@@ -416,9 +498,12 @@ if ( zelbench_counter > 2 || zelcashd_counter > 2 ){
 
 try{
   
-    var zelbench_getstatus_info = JSON.parse(shell.exec("zelbench-cli getstatus",{ silent: true }).stdout);
+    var zelbench_getstatus_info = JSON.parse(shell.exec(`${bench_cli} getstatus`,{ silent: true }).stdout);
     var zelbench_status = zelbench_getstatus_info.status;
     var zelback_status = zelbench_getstatus_info.zelback;
+    if ( typeof zelback_status  == "undefined" ){
+      zelback_status = zelbench_getstatus_info.flux;
+    }
     var zelbench_benchmark_status = zelbench_getstatus_info.benchmarking;
 
  }catch {
@@ -426,8 +511,8 @@ try{
 }
 
  try{
-    var zelbench_getbenchmarks_info = JSON.parse(shell.exec("zelbench-cli getbenchmarks",{ silent: true }).stdout);
-    var zelbench_ddwrite = zelbench_getbenchmarks_info.ddwrite;
+    var zelbench_getbenchmarks_info = JSON.parse(shell.exec(`${bench_cli} getbenchmarks`,{ silent: true }).stdout);
+  //  var zelbench_ddwrite = zelbench_getbenchmarks_info.ddwrite;
     var zelbench_eps = zelbench_getbenchmarks_info.eps;
     var zelbench_time = zelbench_getbenchmarks_info.time;
  }catch {
@@ -435,14 +520,14 @@ try{
 }
 
  try{
-    var  zelcash_getinfo_info = JSON.parse(shell.exec("zelcash-cli getinfo",{ silent: true }).stdout);
+    var  zelcash_getinfo_info = JSON.parse(shell.exec(`${daemon_cli} getinfo`,{ silent: true }).stdout);
     var zelcash_check = zelcash_getinfo_info.version;
  }catch {
 
 }
 
  try{
-    var zelcash_getzelnodestatus_info = JSON.parse(shell.exec("zelcash-cli getzelnodestatus",{ silent: true }).stdout);
+    var zelcash_getzelnodestatus_info = JSON.parse(shell.exec(`${daemon_cli} getzelnodestatus`,{ silent: true }).stdout);
     var zelcash_node_status = zelcash_getzelnodestatus_info.status
     var zelcash_last_paid_height = zelcash_getzelnodestatus_info.last_paid_height
     var activesince = zelcash_getzelnodestatus_info.activesince
@@ -454,59 +539,63 @@ try{
 const mongod_check = shell.exec("pgrep mongod",{ silent: true }).stdout;
 
 if (zelcash_node_status == "" || typeof zelcash_node_status == "undefined" ){
-   console.log('Zelnode status = \x1b[31mdead\x1b[0m');
+   console.log('Fluxnode status = dead');
 } else {
   if ( zelcash_node_status == "expired"){
-    console.log('Zelnode status =\x1b[31m',zelcash_node_status, '\x1b[0m');
+    console.log('Fluxnode status = '+zelcash_node_status);
 
     if (expiried_time != "1"){
     expiried_time="1";
-    error('Zelnode expired => UTC: '+data_time_utc+' | LOCAL: '+local);
+    error('Fluxnode expired => UTC: '+data_time_utc+' | LOCAL: '+local);
+    discord_hook('Fluxnode expired\nUTC: '+data_time_utc+'\nLOCAL: '+local,web_hook_url);
     }
 
    }
   else {
    expiried_time="N/A";
-   console.log('Zelnode status =\x1b[34m',zelcash_node_status, '\x1b[0m');
+   console.log('Fluxnode status = '+zelcash_node_status);
    }
 }
 
 if (zelback_status == "" || typeof zelback_status == "undefined"){
-  console.log('Zelback status = \x1b[31mdead\x1b[0m');
+  console.log('Fluxback status = dead');
 } else {
 
   if (zelback_status == "disconnected"){
-    console.log('Zelback status =\x1b[31m',zelback_status,'\x1b[0m');
+    console.log('FluxOS status = '+zelback_status);
     if ( lock_zelback != "1" ) {
-    error('ZelBack disconnected!');
+    error('FluxOS disconnected!');
+    discord_hook("FluxOS disconnected!",web_hook_url);
     lock_zelback=1;
     }
   } else {
-    console.log('Zelback status =\x1b[34m',zelback_status,'\x1b[0m');
+    console.log('FluxOS status = '+zelback_status);
     lock_zelback=0;
   }
 }
 
  if (zelbench_status == "" || typeof zelbench_status == "undefined"){
-console.log('Zelbench status = \x1b[31mdead\x1b[0m');
+console.log('Fluxbench status = dead');
 } else {
 
   if (zelbench_status  == "online"){
-    console.log('Zelbench status =\x1b[32m',zelbench_status,'\x1b[0m');
+    console.log('Fluxbench status = '+zelbench_status);
   } else {
-    console.log('Zelbench status =\x1b[31m',zelbench_status,'\x1b[0m');
+    console.log('Fluxbench status = '+zelbench_status);
   }
 
 }
 
 if (zelbench_benchmark_status == "" || typeof zelbench_benchmark_status == "undefined"){
-  console.log('Zelbench benchmark status = \x1b[31mdead\x1b[0m');
+  console.log('Fluxbench status = dead');
 } else {
 
   if (zelbench_benchmark_status == "toaster" || zelbench_benchmark_status  == "failed" ){
-    console.log('Benchmark status =\x1b[31m',zelbench_benchmark_status,'\x1b[0m');
+    console.log('Benchmark status = '+zelbench_benchmark_status);
+    discord_hook('Benchmark '+zelbench_benchmark_status,web_hook_url);
+    
   } else {
-    console.log('Benchmark status =\x1b[34m',zelbench_benchmark_status,'\x1b[0m');
+    console.log('Benchmark status = '+zelbench_benchmark_status);
   }
 }
 
@@ -519,56 +608,60 @@ if (zelbench_time  == "null" || zelbench_time == "" || typeof zelbench_time == "
   const start_date = moment(data_time_utc, 'YYYY-MM-DD HH:mm:ss');
   const end_date = moment(next_benchmark_time, 'YYYY-MM-DD HH:mm:ss');
   const time_left = moment(end_date.diff(start_date)).format("mm:ss");
-  console.log('Last benchmark time = \x1b[33m'+bench_local_time+'\x1b[0m');
-  console.log('Next benchmark time = \x1b[33m'+next_benchmark_time+' (left: '+time_left+')\x1b[0m');
+  console.log('Last benchmark time = '+bench_local_time);
+  console.log('Next benchmark time = '+next_benchmark_time+' (left: '+time_left+')');
 }
 
 if (zelcash_last_paid_height  == "null" || zelcash_last_paid_height == "" || typeof zelcash_last_paid_height == "undefined"){
 } else{
-  console.log('Last paid hight = \x1b[33m'+zelcash_last_paid_height+'\x1b[0m');
+  console.log('Last paid hight = '+zelcash_last_paid_height);
 }
 
 if (lastpaid == "null" || lastpaid == "" || typeof lastpaid == "undefined"){
-console.log('Last paid time = \x1b[33m'+paid_local_time+'\x1b[0m');
+console.log('Last paid time = '+paid_local_time);
 } else{
   var timestamp_paid = moment.unix(Number(lastpaid));
   paid_local_time = timestamp_paid.format("DD/MM/YYYY HH:mm:ss")
-  console.log('Last paid time = \x1b[33m'+paid_local_time+'\x1b[0m');
+  console.log('Last paid time = '+paid_local_time);
 }
 
 if (activesince  == "null" || activesince == "" || typeof activesince == "undefined"){
 } else{
   const timestamp_active = moment.unix(Number(activesince));
   const active_local_time = timestamp_active.format("DD/MM/YYYY HH:mm:ss")
-  console.log('Active since = \x1b[33m'+active_local_time+'\x1b[0m');
+  console.log('Active since = '+active_local_time);
 }
 
-if (zelbench_ddwrite == "" || typeof zelbench_ddwrite == "undefined"){
-} else{
-  console.log('Disk write speed = \x1b[33m'+Number(zelbench_ddwrite).toFixed(2)+'\x1b[0m');
-}
+//if (zelbench_ddwrite == "" || typeof zelbench_ddwrite == "undefined"){
+//} else{
+ // console.log('Disk write speed = '+Number(zelbench_ddwrite).toFixed(2));
+//}
 
 if (typeof zelcash_check !== "undefined" ){
   zelcashd_counter=0;
-  console.log('Zelcash status = \x1b[32mrunning\x1b[0m');
+  console.log('Flux daemon status = running');
 }
 else {
   ++zelcashd_counter;
-  console.log('Zelcash status = \x1b[31mdead\x1b[0m');
+  console.log('Flux daemon status = dead');
   shell.exec("sudo systemctl stop zelcash",{ silent: true })
   sleep.sleep(2);
   shell.exec("sudo fuser -k 16125/tcp",{ silent: true })
   shell.exec("sudo systemctl start zelcash",{ silent: true })
-  console.log(data_time_utc+' => \x1b[35mZelcash restarting...\x1b[0m');
-  error('Zelcash crash detected!');
+  console.log(data_time_utc+' => Flux daemon restarting...');
+  error('Flux daemon crash detected!');
+  discord_hook("Flux daemon crash detected!",web_hook_url);
 }
 
 if ( zelbench_benchmark_status == "toaster" || zelbench_benchmark_status == "failed" ){
   ++zelbench_counter;
-  error('Benchmark problem detected! Zelbench status: '+zelbench_benchmark_status);
-  console.log('\x1b[35mBenchmark problem detected! Zelbench status: '+zelbench_benchmark_status+'\x1b[0m');
-  console.log(data_time_utc+' => \x1b[35mZelbench restarting...\x1b[0m');
-  shell.exec("zelbench-cli restartnodebenchmarks",{ silent: true });
+  var error_line=shell.exec("egrep -a --color 'Failed' /home/$USER/.fluxbenchmark/debug.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//'",{ silent: true });
+  error('Benchmark problem detected! Fluxbench status: '+zelbench_benchmark_status);
+  error('Reason: '+error_line.trim());
+  console.log('Benchmark problem detected! Fluxbench status: '+zelbench_benchmark_status);
+  console.log('Reason: '+error_line.trim());
+  console.log(data_time_utc+' => Fluxbench restarting...');
+  shell.exec(`${bench_cli} restartnodebenchmarks`,{ silent: true });
 }
 else{
 zelbench_counter=0;
@@ -581,10 +674,10 @@ if (config.tier_eps_min != "" && config.tier_eps_min != "0" && zelbench_eps != "
 ++tire_lock;
 if ( tire_lock < 4 ) {
 error('Benchmark problem detected! CPU eps under minimum limit for '+tire_name+'('+eps_limit+'), current eps: '+zelbench_eps.toFixed(2));
-console.log('\x1b[35mBenchmark problem detected!\x1b[0m');
-console.log('\x1b[35mCPU eps under minimum limit for '+tire_name+'('+eps_limit+'), current eps: '+zelbench_eps.toFixed(2)+'\x1b[0m');
-console.log(data_time_utc+' => \x1b[35mZelbench restarting...\x1b[0m');
-shell.exec("zelbench-cli restartnodebenchmarks",{ silent: true });
+console.log('Benchmark problem detected!');
+console.log('CPU eps under minimum limit for '+tire_name+'('+eps_limit+'), current eps: '+zelbench_eps.toFixed(2));
+console.log(data_time_utc+' => Fluxbench restarting...');
+shell.exec(`${bench_cli} restartnodebenchmarks`,{ silent: true });
 }
   
 } else {
@@ -594,22 +687,24 @@ tire_lock=0;
 if (mongod_check == ""){
 
   ++mongod_counter;
-  console.log('MongoDB status = \x1b[31mdead\x1b[0m');
+  console.log('MongoDB status = dead');
 
   if (mongod_counter < 4){
-  console.log(data_time_utc+' => \x1b[35mMongoDB restarting...\x1b[0m');
+  console.log(data_time_utc+' => MongoDB restarting...');
   shell.exec("sudo systemctl restart mongod",{ silent: true })
   }
 
   if ( mongod_counter == "1" ){
-  error('MongodDB crash detected!');
+  error('MongoDB crash detected!');
+  discord_hook("MongoDB crash detected!",web_hook_url);
   }
 
 } else {
  mongod_counter=0;
 }
 
-console.log('============================================================[\x1b[36m'+zelbench_counter+'/'+zelcashd_counter+'\x1b[0m]');
+console.log('============================================================['+zelbench_counter+'/'+zelcashd_counter+']');
+  
 }
 setInterval(zeldaemon_check, 170000);
 setInterval(auto_update, 10800000);
