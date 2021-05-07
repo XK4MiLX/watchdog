@@ -51,7 +51,7 @@ var explorer_block_height_03 = await shell.exec(`${exec_comment3}`,{ silent: tru
 var explorer_block_height = max(explorer_block_height_01,explorer_block_height_02,explorer_block_height_03);
 var height_diff = Math.abs(explorer_block_height-height);
 
- if ( height_diff > 15 && sync_lock == 0 ) {
+ if ( height_diff < 10 && sync_lock == 0 ) {
    console.log(`Flux daemon is synced (${height}, diff: ${height_diff})`);
    sync_lock = 0;
   }else{
