@@ -10,6 +10,7 @@ console.log('Watchdog v5.0.0 Starting...');
 console.log('=================================================================');
 
 const path = 'config.js';
+var sync_lock = 0;
 
 function discord_hook(node_error,web_hook_url){
   
@@ -28,6 +29,43 @@ function discord_hook(node_error,web_hook_url){
    }  
   
  }
+
+function max() {
+    var args = Array.prototype.slice.call(arguments);
+    return Math.max.apply(Math, args.filter(function(val) {
+       return !isNaN(val);
+    }));
+}
+
+
+async function Check_Sync(height) {
+
+var exec_comment1=`curl -sk -m 8 https://explorer.flux.zelcore.io/api/status?q=getInfo | jq '.info.blocks'`
+var exec_comment2=`curl -sk -m 8 https://explorer.runonflux.io/api/status?q=getInfo | jq '.info.blocks'`
+var exec_comment3=`curl -sk -m 8 https://explorer.zelcash.online/api/status?q=getInfo | jq '.info.blocks'`
+var explorer_block_height_01 = await shell.exec(`${exec_comment1}`,{ silent: true }).stdout;
+var explorer_block_height_02 = await shell.exec(`${exec_comment2}`,{ silent: true }).stdout;
+var explorer_block_height_03 = await shell.exec(`${exec_comment3}`,{ silent: true }).stdout;
+
+
+var explorer_block_height = max(explorer_block_height_01,explorer_block_height_02,explorer_block_height_03);
+var height_diff = Math.abs(explorer_block_height-height);
+
+ if ( height_diff > 15 && sync_lock == 0 ) {
+   console.log(`Flux daemon is synced (${height}, diff: ${height_diff})`);
+   sync_lock = 0;
+  }else{
+       
+      console.log(`Flux daemon is not synced (${height}, diff: ${height_diff})`);
+    if ( sync_lock == 0 ) {
+      discord_hook(`Flux daemon is not synced!\nDaemon height: **${height}**\nNetwork height: **${explorer_block_height}**\nDiff: **${height_diff}**`,web_hook_url);
+      sync_lock = 1;
+    }
+    
+  }
+
+
+} 
 
 
 
@@ -423,7 +461,7 @@ console.log('=================================================================')
 
 }
 
-function zeldaemon_check() {
+async function zeldaemon_check() {
   
   delete require.cache[require.resolve('./config.js')];
   var config = require('./config.js');
@@ -522,6 +560,7 @@ try{
  try{
     var  zelcash_getinfo_info = JSON.parse(shell.exec(`${daemon_cli} getinfo`,{ silent: true }).stdout);
     var zelcash_check = zelcash_getinfo_info.version;
+    var zelcash_height = zelcash_getinfo_info.blocks;
  }catch {
 
 }
@@ -702,9 +741,14 @@ if (mongod_check == ""){
 } else {
  mongod_counter=0;
 }
+  
+ if ( zelcash_height != "" || typeof zelcash_height != "undefined" ){
+  await Check_Sync(zelcash_height);   
+ }
+  
 
 console.log('============================================================['+zelbench_counter+'/'+zelcashd_counter+']');
   
 }
-setInterval(zeldaemon_check, 170000);
-setInterval(auto_update, 10800000);
+setInterval(zeldaemon_check, 3*60*1000);
+setInterval(auto_update, 120*60*1000);
