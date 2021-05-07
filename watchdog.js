@@ -6,7 +6,7 @@ const fs = require('fs');
 
 
 sleep.sleep(15);
-console.log('Watchdog v5.0.0 Starting...');
+console.log('Watchdog v5.0.1 Starting...');
 console.log('=================================================================');
 
 const path = 'config.js';
@@ -21,7 +21,7 @@ function discord_hook(node_error,web_hook_url){
     const msg = new webhook.MessageBuilder()
     .setName("Flux Watchdog")
     .setTitle(':loudspeaker: **FluxNode Alert**')
-    .addField('IP:', node_ip)
+    .addField('URL:', `http://${node_ip}:16126`)
     .addField('Error:', node_error)
     .setColor('#ea1414')
     .setThumbnail('https://fluxnodeservice.com/favicon.png');
@@ -66,8 +66,6 @@ var height_diff = Math.abs(explorer_block_height-height);
 
 
 } 
-
-
 
 
 if (fs.existsSync(path)) {
@@ -213,6 +211,7 @@ console.log('=================================================================')
     zelflux_update: '0',
     zelcash_update: '0',
     zelbench_update: '0',
+    action: '1',
     web_hook_url: '0'
 }`;
 
@@ -466,6 +465,7 @@ async function zeldaemon_check() {
   delete require.cache[require.resolve('./config.js')];
   var config = require('./config.js');
   web_hook_url=config.web_hook_url;
+  var action = config.action;
   
   const service_inactive = shell.exec("systemctl list-units --full -all | grep 'zelcash' | grep -o 'inactive'",{ silent: true }).stdout;
   const data_time_utc = moment.utc().format('YYYY-MM-DD HH:mm:ss');
@@ -681,15 +681,23 @@ if (typeof zelcash_check !== "undefined" ){
   console.log('Flux daemon status = running');
 }
 else {
-  ++zelcashd_counter;
+  
+  ++zelcashd_counter; 
   console.log('Flux daemon status = dead');
-  shell.exec("sudo systemctl stop zelcash",{ silent: true })
-  sleep.sleep(2);
-  shell.exec("sudo fuser -k 16125/tcp",{ silent: true })
-  shell.exec("sudo systemctl start zelcash",{ silent: true })
-  console.log(data_time_utc+' => Flux daemon restarting...');
-  error('Flux daemon crash detected!');
-  discord_hook("Flux daemon crash detected!",web_hook_url);
+  
+   if ( zelcashd_counter == "1" ){
+      error('Flux daemon crash detected!');
+      discord_hook("Flux daemon crash detected!",web_hook_url);
+   }
+  
+   if ( typeof action  == "undefined" || action == "1" ){    
+      shell.exec("sudo systemctl stop zelcash",{ silent: true });
+      sleep.sleep(2);
+      shell.exec("sudo fuser -k 16125/tcp",{ silent: true });
+      shell.exec("sudo systemctl start zelcash",{ silent: true });
+      console.log(data_time_utc+' => Flux daemon restarting...'); 
+   }
+        
 }
 
 if ( zelbench_benchmark_status == "toaster" || zelbench_benchmark_status == "failed" ){
@@ -699,8 +707,10 @@ if ( zelbench_benchmark_status == "toaster" || zelbench_benchmark_status == "fai
   error('Reason: '+error_line.trim());
   console.log('Benchmark problem detected! Fluxbench status: '+zelbench_benchmark_status);
   console.log('Reason: '+error_line.trim());
-  console.log(data_time_utc+' => Fluxbench restarting...');
-  shell.exec(`${bench_cli} restartnodebenchmarks`,{ silent: true });
+  if ( typeof action  == "undefined" || action == "1" ){
+    console.log(data_time_utc+' => Fluxbench restarting...');
+    shell.exec(`${bench_cli} restartnodebenchmarks`,{ silent: true });
+  }
 }
 else{
 zelbench_counter=0;
@@ -715,8 +725,10 @@ if ( tire_lock < 4 ) {
 error('Benchmark problem detected! CPU eps under minimum limit for '+tire_name+'('+eps_limit+'), current eps: '+zelbench_eps.toFixed(2));
 console.log('Benchmark problem detected!');
 console.log('CPU eps under minimum limit for '+tire_name+'('+eps_limit+'), current eps: '+zelbench_eps.toFixed(2));
-console.log(data_time_utc+' => Fluxbench restarting...');
-shell.exec(`${bench_cli} restartnodebenchmarks`,{ silent: true });
+  if ( typeof action  == "undefined" || action == "1" ){
+    console.log(data_time_utc+' => Fluxbench restarting...');
+    shell.exec(`${bench_cli} restartnodebenchmarks`,{ silent: true });
+  }
 }
   
 } else {
@@ -729,8 +741,10 @@ if (mongod_check == ""){
   console.log('MongoDB status = dead');
 
   if (mongod_counter < 4){
-  console.log(data_time_utc+' => MongoDB restarting...');
-  shell.exec("sudo systemctl restart mongod",{ silent: true })
+      if ( typeof action  == "undefined" || action == "1" ){ 
+          console.log(data_time_utc+' => MongoDB restarting...');
+          shell.exec("sudo systemctl restart mongod",{ silent: true })
+      }
   }
 
   if ( mongod_counter == "1" ){
