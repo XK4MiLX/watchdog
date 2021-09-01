@@ -4,7 +4,7 @@
 
 ![screen2](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/w_menu.jpg)
 
-* Use option "2" for new installation diuring install process anser yes when will ask about watchdog install
+* Use option "2" for new installation during install process answer yes when will ask about watchdog install
 * For existing node installation use option "4"
 
 
@@ -43,7 +43,7 @@ module.exports = {
 <b>Watchdog options:</b>
 * Auto restart daemon when crash  
 * Auto restart benchmark when "failed" or "taoster"
-* Auto restart when eps drop belown minim. limit for tier
+* Auto restart when eps drop belon minimum limit for tier
 * Auto restart MongoDB when crash
 * Auto-update supported
 * Discord integration
