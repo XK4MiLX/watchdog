@@ -52,8 +52,7 @@ async function discord_hook(node_error,web_hook_url,ping) {
           .setTitle(':loudspeaker: **FluxNode Alert**')
           .addField('URL:', `http://${node_ip}:16126`)
           .addField('Error:', node_error)
-          .setColor('#ea1414')
-          .setThumbnail('https://fluxnodeservice.com/favicon.png');
+          .setColor('#ea1414');
           Hook.send(msg);
       } else {
           var node_ip = await Myip();
@@ -64,7 +63,6 @@ async function discord_hook(node_error,web_hook_url,ping) {
           .addField('URL:', `http://${node_ip}:16126`)
           .addField('Error:', node_error)
           .setColor('#ea1414')
-          .setThumbnail('https://fluxnodeservice.com/favicon.png')
           .setText(`Ping: <@${ping}>`);
            Hook.send(msg);
       }
